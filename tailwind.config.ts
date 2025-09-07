@@ -47,6 +47,17 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        "flow-good": "hsl(var(--flow-good))",
+        "flow-medium": "hsl(var(--flow-medium))",
+        "flow-heavy": "hsl(var(--flow-heavy))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -57,6 +68,25 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['IBM Plex Mono', 'Consolas', 'monospace'],
+      },
+      boxShadow: {
+        'panel': 'var(--panel-shadow)',
+        'glow-primary': 'var(--glow-primary)',
+        'glow-warning': 'var(--glow-warning)',
+        'glow-danger': 'var(--glow-danger)',
+      },
+      backgroundImage: {
+        'gradient-flow': 'var(--gradient-flow)',
+        'gradient-panel': 'var(--gradient-panel)',
+        'gradient-danger': 'var(--gradient-danger)',
+      },
+      transitionTimingFunction: {
+        'smooth': 'var(--transition-smooth)',
+        'fast': 'var(--transition-fast)',
       },
       borderRadius: {
         lg: "var(--radius)",
