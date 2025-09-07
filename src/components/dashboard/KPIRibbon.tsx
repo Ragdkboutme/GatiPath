@@ -64,34 +64,40 @@ const KPICard = ({
   );
 };
 
-export const KPIRibbon = () => {
+export const KPIRibbon = ({ isOdia = false }) => {
+  const translations = {
+    avgCommute: isOdia ? "ଔସତ ଯାତ୍ରା ସମୟ" : "Avg commute time",
+    congestionIndex: isOdia ? "ଜାମ ସୂଚକ" : "Congestion Index", 
+    emissionsSaved: isOdia ? "ଆଜି ଉଦ୍ଗାସିତ କମିଲା" : "Emissions Saved Today",
+    alertsActive: isOdia ? "ସକ୍ରିୟ ଅଲର୍ଟ" : "Alerts Active"
+  };
   return (
     <div className="p-6 border-b border-border">
       <div className="grid grid-cols-4 gap-6">
         <KPICard
-          title="Avg Commute Time"
-          value={34}
-          unit="min"
+          title={translations.avgCommute}
+          value={isOdia ? "34 ମିନିଟ" : "34"}
+          unit={isOdia ? "" : "min"}
           trend="down"
           trendValue="-10%"
           icon={TrendingDown}
           variant="success"
         />
         <KPICard
-          title="Congestion Index"
+          title={translations.congestionIndex}
           value="28%"
           icon={Gauge}
           variant="warning"
         />
         <KPICard
-          title="Emissions Saved Today"
-          value={125}
-          unit="kg CO₂"
+          title={translations.emissionsSaved}
+          value={isOdia ? "125 କେଜି CO₂" : "125"}
+          unit={isOdia ? "" : "kg CO₂"}
           icon={Leaf}
           variant="success"
         />
         <KPICard
-          title="Alerts Active"
+          title={translations.alertsActive}
           value={3}
           icon={AlertTriangle}
           variant="danger"

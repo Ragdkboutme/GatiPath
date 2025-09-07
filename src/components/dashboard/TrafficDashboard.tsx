@@ -4,15 +4,17 @@ import { LeftSidebar } from "./LeftSidebar";
 import { MapHeatmap } from "./MapHeatmap";
 import { RightColumn } from "./RightColumn";
 import { BottomAnalytics } from "./BottomAnalytics";
+import { useState } from "react";
 
 export const TrafficDashboard = () => {
+  const [isOdia, setIsOdia] = useState(false);
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Top Bar */}
-      <TopBar />
+      <TopBar isOdia={isOdia} setIsOdia={setIsOdia} />
       
       {/* KPI Ribbon */}
-      <KPIRibbon />
+      <KPIRibbon isOdia={isOdia} />
       
       {/* Main Layout */}
       <div className="flex h-[calc(100vh-180px)]">
@@ -20,8 +22,8 @@ export const TrafficDashboard = () => {
         <LeftSidebar />
         
         {/* Center Map Area */}
-        <div className="flex-1 p-4">
-          <MapHeatmap />
+        <div className="flex-1 p-4 mr-12">
+          <MapHeatmap isOdia={isOdia} />
         </div>
         
         {/* Right Column */}
@@ -34,7 +36,10 @@ export const TrafficDashboard = () => {
       {/* Footer */}
       <div className="border-t border-border px-6 py-3">
         <p className="text-xs text-muted-foreground">
-          For operators only — raw CCTV access disabled; aggregated feeds only
+          {isOdia 
+            ? "କେବଳ ଅପରେଟରମାନଙ୍କ ପାଇଁ — କଞ୍ଚା CCTV ଆକସେସ୍ ଅକ୍ଷମ; କେବଳ ଏକତ୍ରିତ ଫିଡ୍" 
+            : "For operators only — raw CCTV access disabled; aggregated feeds only"
+          }
         </p>
       </div>
     </div>
