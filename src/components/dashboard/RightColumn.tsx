@@ -1,8 +1,9 @@
-import { Video, Eye, Brain, Zap, Cloud, Thermometer, Wind, Activity, Battery, Wifi } from "lucide-react";
+import { Video, Eye, Brain, Zap, Cloud, Thermometer, Wind, Activity, Battery, Wifi, Bell } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { EventsFeed } from "./EventsFeed";
 
 const CCTVTile = ({ camera, location, status }: { camera: string; location: string; status: "online" | "offline" }) => (
   <div className="relative aspect-video bg-secondary rounded-md overflow-hidden border border-border">
@@ -27,15 +28,15 @@ const CCTVTile = ({ camera, location, status }: { camera: string; location: stri
   </div>
 );
 
-export const RightColumn = () => {
+export const RightColumn = ({ isOdia = false }: { isOdia?: boolean }) => {
   return (
-    <div className="w-80 space-y-4 p-4">
+    <div className="w-80 border-l border-border bg-gradient-panel p-4 flex flex-col gap-6 h-full overflow-y-auto">
       {/* CCTV Panel */}
       <Card className="bg-gradient-panel border-border/50">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
             <Video className="w-4 h-4" />
-            Live CCTV — Privacy First
+            {isOdia ? "ଲାଇଭ CCTV — ଗୋପନୀୟତା ପ୍ରଥମ" : "Live CCTV — Privacy First"}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -47,7 +48,7 @@ export const RightColumn = () => {
           </div>
           <div className="text-xs text-muted-foreground bg-muted/20 rounded p-2">
             <Eye className="w-3 h-3 inline mr-1" />
-            Edge-processed — blurred for privacy
+            {isOdia ? "ଏଜ-ପ୍ରକ୍ରିୟାକରଣ — ଗୋପନୀୟତା ପାଇଁ ଅସ୍ପଷ୍ଟ" : "Edge-processed — blurred for privacy"}
           </div>
         </CardContent>
       </Card>
@@ -57,22 +58,22 @@ export const RightColumn = () => {
         <CardHeader className="pb-3">
           <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
             <Brain className="w-4 h-4" />
-            RL Engine — Q-Flow v1.2
+            {isOdia ? "RL ଇଞ୍ଜିନ — Q-Flow v1.2" : "RL Engine — Q-Flow v1.2"}
             <Badge variant="default" className="bg-flow-good text-primary-foreground ml-auto">ON</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Current Decision */}
           <div className="text-center">
-            <div className="text-xs text-muted-foreground mb-1">Current Action</div>
-            <div className="text-lg font-bold text-primary">Phase: NS_GREEN</div>
-            <div className="text-2xl font-bold text-foreground">Duration: 25s</div>
+            <div className="text-xs text-muted-foreground mb-1">{isOdia ? "ବର୍ତ୍ତମାନ କାର୍ଯ୍ୟ" : "Current Action"}</div>
+            <div className="text-lg font-bold text-primary">{isOdia ? "ଫେଜ: NS_GREEN" : "Phase: NS_GREEN"}</div>
+            <div className="text-2xl font-bold text-foreground">{isOdia ? "ଅବଧି: 25s" : "Duration: 25s"}</div>
           </div>
 
           {/* Confidence */}
           <div>
             <div className="flex justify-between text-xs mb-2">
-              <span className="text-muted-foreground">Confidence</span>
+              <span className="text-muted-foreground">{isOdia ? "ଆତ୍ମବିଶ୍ୱାସ" : "Confidence"}</span>
               <span className="text-foreground font-medium">82%</span>
             </div>
             <Progress value={82} className="h-2" />
@@ -80,15 +81,15 @@ export const RightColumn = () => {
 
           {/* Reason */}
           <div className="bg-muted/20 rounded p-3">
-            <div className="text-xs text-muted-foreground mb-1">Decision Reason</div>
+            <div className="text-xs text-muted-foreground mb-1">{isOdia ? "ନିଷ୍ପତ୍ତି କାରଣ" : "Decision Reason"}</div>
             <div className="text-sm text-foreground">
-              Predicted inflow N-S high in 2 min (GPS + CCTV + IoT rain flag)
+              {isOdia ? "2 ମିନିଟରେ N-S ଉଚ୍ଚ ପ୍ରବାହ ଅନୁମାନ (GPS + CCTV + IoT ବର୍ଷା ଫ୍ଲାଗ)" : "Predicted inflow N-S high in 2 min (GPS + CCTV + IoT rain flag)"}
             </div>
           </div>
 
           {/* Recent Decisions */}
           <div>
-            <div className="text-xs text-muted-foreground mb-2 uppercase tracking-wide">Last 5 Decisions</div>
+            <div className="text-xs text-muted-foreground mb-2 uppercase tracking-wide">{isOdia ? "ଶେଷ 5 ନିଷ୍ପତ୍ତି" : "Last 5 Decisions"}</div>
             <div className="space-y-1 text-xs">
               <div className="flex justify-between">
                 <span className="font-mono text-muted-foreground">08:45</span>
@@ -121,12 +122,25 @@ export const RightColumn = () => {
         </CardContent>
       </Card>
 
+      {/* Events & Alerts */}
+      <Card className="bg-gradient-panel border-border/50">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
+            <Bell className="w-4 h-4" />
+            Events & Alerts
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <EventsFeed isOdia={isOdia} />
+        </CardContent>
+      </Card>
+
       {/* IoT & Weather */}
       <Card className="bg-gradient-panel border-border/50">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
             <Activity className="w-4 h-4" />
-            IoT & Environment
+            {isOdia ? "IoT ଏବଂ ପରିବେଶ" : "IoT & Environment"}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

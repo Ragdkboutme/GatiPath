@@ -1,37 +1,47 @@
 import { TopBar } from "./TopBar";
 import { KPIRibbon } from "./KPIRibbon";
 import { LeftSidebar } from "./LeftSidebar";
-import { MapHeatmap } from "./MapHeatmap";
+import { InteractiveMap } from "./InteractiveMap";
 import { RightColumn } from "./RightColumn";
 import { BottomAnalytics } from "./BottomAnalytics";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export const TrafficDashboard = () => {
   const [isOdia, setIsOdia] = useState(false);
+  
+  const handleLanguageChange = useCallback((value: boolean) => {
+    setIsOdia(value);
+  }, []);
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="flex flex-col h-screen bg-background text-foreground">
       {/* Top Bar */}
       <TopBar isOdia={isOdia} setIsOdia={setIsOdia} />
       
       {/* KPI Ribbon */}
       <KPIRibbon isOdia={isOdia} />
       
-      {/* Main Layout */}
-      <div className="flex h-[calc(100vh-180px)]">
-        {/* Left Sidebar */}
-        <LeftSidebar />
-        
-        {/* Center Map Area */}
-        <div className="flex-1 p-4 mr-12">
-          <MapHeatmap isOdia={isOdia} />
+      {/* Main Content */}
+      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
+        {/* Left Sidebar - Hidden on mobile, shown on tablet and up */}
+        <div className="hidden md:block">
+          <LeftSidebar onLanguageChange={handleLanguageChange} />
         </div>
-        
-        {/* Right Column */}
-        <RightColumn />
+
+        {/* Center Map Area */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 overflow-hidden">
+            <InteractiveMap isOdia={isOdia} />
+          </div>
+          <div className="h-[40%] md:h-[40%] overflow-auto">
+            <BottomAnalytics isOdia={isOdia} />
+          </div>
+        </div>
+
+        {/* Right Column - Hidden on mobile, shown on desktop */}
+        <div className="hidden lg:block">
+          <RightColumn isOdia={isOdia} />
+        </div>
       </div>
-      
-      {/* Bottom Analytics */}
-      <BottomAnalytics />
       
       {/* Footer */}
       <div className="border-t border-border px-6 py-3">

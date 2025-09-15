@@ -1,12 +1,14 @@
-import { Search, ChevronDown, Clock, Video, Satellite, Cpu, Power, Play } from "lucide-react";
+import { Search, ChevronDown, Clock, Video, Satellite, Cpu, Power, Play, Languages } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { useState } from "react";
 
-export const LeftSidebar = () => {
+export const LeftSidebar = ({ onLanguageChange }: { onLanguageChange?: (isOdia: boolean) => void }) => {
+  const [isOdia, setIsOdia] = useState(false);
   return (
-    <div className="w-64 bg-card border-r border-border p-4 space-y-4">
+    <div className="w-64 border-r border-border bg-gradient-panel p-4 flex flex-col gap-6 h-full overflow-y-auto">
       {/* Region Selector */}
       <Card className="bg-gradient-panel border-border/50">
         <CardHeader className="pb-3">
@@ -79,20 +81,52 @@ export const LeftSidebar = () => {
       {/* Manual Controls */}
       <Card className="bg-gradient-panel border-border/50">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide">Manual Override</CardTitle>
+          <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide">
+            {isOdia ? "ମାନୁଆଲ ଓଭରାଇଡ" : "Manual Override"}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <Button variant="destructive" size="sm" className="w-full justify-start gap-2">
             <Power className="w-4 h-4" />
-            Emergency Override
+            {isOdia ? "ଜରୁରୀକାଳୀନ ଓଭରାଇଡ" : "Emergency Override"}
           </Button>
           
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Play className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm text-foreground">Shadow Mode</span>
+              <span className="text-sm text-foreground">
+                {isOdia ? "ଛାୟା ମୋଡ" : "Shadow Mode"}
+              </span>
             </div>
             <Switch />
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* Language Selector */}
+      <Card className="bg-gradient-panel border-border/50">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
+            <Languages className="w-4 h-4" />
+            {isOdia ? "ଭାଷା" : "Language"}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-foreground">
+                {isOdia ? "ଓଡ଼ିଆ" : "Odia"}
+              </span>
+            </div>
+            <Switch 
+              checked={isOdia} 
+              onCheckedChange={(checked) => {
+                setIsOdia(checked);
+                if (onLanguageChange) {
+                  onLanguageChange(checked);
+                }
+              }} 
+            />
           </div>
         </CardContent>
       </Card>

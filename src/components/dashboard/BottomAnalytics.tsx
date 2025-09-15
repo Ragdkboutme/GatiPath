@@ -1,9 +1,10 @@
-import { TrendingDown, Clock, AlertTriangle, Filter } from "lucide-react";
+import { TrendingDown, Clock, AlertTriangle, Filter, MoreHorizontal } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
-const TimeSeriesChart = () => (
+const TimeSeriesChart = ({ isOdia }: { isOdia: boolean }) => (
   <div className="h-48 bg-secondary/20 rounded-lg flex items-center justify-center relative overflow-hidden">
     {/* Simulated chart background */}
     <div className="absolute inset-0 opacity-10">
@@ -56,13 +57,13 @@ const TimeSeriesChart = () => (
       </div>
       <Badge variant="default" className="bg-flow-good text-primary-foreground">
         <TrendingDown className="w-3 h-3 mr-1" />
-        10% Reduction in Wait Time
+        {isOdia ? "ଅପେକ୍ଷା ସମୟରେ 10% ହ୍ରାସ" : "10% Reduction in Wait Time"}
       </Badge>
     </div>
   </div>
 );
 
-const EventsFeed = () => {
+const EventsFeed = ({ isOdia = false }: { isOdia?: boolean }) => {
   const events = [
     { time: "08:45", type: "pothole", message: "Pothole detected (Segment S-042)", variant: "destructive" as const },
     { time: "08:40", type: "rl", message: "RL applied NS 25s (Δ wait -6%)", variant: "default" as const },
@@ -90,39 +91,80 @@ const EventsFeed = () => {
   );
 };
 
-export const BottomAnalytics = () => {
+export const BottomAnalytics = ({ isOdia = false }: { isOdia?: boolean }) => {
   return (
     <div className="border-t border-border p-6">
-      <div className="grid grid-cols-2 gap-6">
+      <h2 className="text-lg font-medium mb-4">{isOdia ? "ବିଶ୍ଳେଷଣ ଏବଂ ଅନ୍ତର୍ଦୃଷ୍ଟି" : "Analytics & Insights"}</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Time Series Chart */}
         <Card className="bg-gradient-panel border-border/50">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
-              <Clock className="w-4 h-4" />
-              Performance Comparison — Past Hour
-            </CardTitle>
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">{isOdia ? "କାର୍ଯ୍ୟଦକ୍ଷତା ତୁଳନା" : "Performance Comparison"}</CardTitle>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
-            <TimeSeriesChart />
+            <TimeSeriesChart isOdia={isOdia} />
+          </CardContent>
+        </Card>
+
+        {/* Air Quality Index */}
+        <Card className="bg-gradient-panel border-border/50">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">{isOdia ? "ବାୟୁ ଗୁଣବତ୍ତା ସୂଚକାଙ୍କ" : "Air Quality Index"}</CardTitle>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">PM2.5</span>
+                <span className="text-xs font-medium">42 μg/m³</span>
+              </div>
+              <Progress value={42} max={100} className="h-2" />
+              
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-xs text-muted-foreground">PM10</span>
+                <span className="text-xs font-medium">78 μg/m³</span>
+              </div>
+              <Progress value={78} max={100} className="h-2" />
+              
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-xs text-muted-foreground">NO₂</span>
+                <span className="text-xs font-medium">35 ppb</span>
+              </div>
+              <Progress value={35} max={100} className="h-2" />
+              
+              <div className="mt-2 pt-2 border-t border-border">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium">{isOdia ? "ସମଗ୍ର AQI" : "Overall AQI"}</span>
+                  <Badge variant="outline" className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">
+                    {isOdia ? "ମଧ୍ୟମ" : "Moderate"}
+                  </Badge>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
         {/* Events & Alerts */}
         <Card className="bg-gradient-panel border-border/50">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4" />
-                Events & Alerts
-              </div>
-              <Button variant="ghost" size="sm" className="text-xs">
-                <Filter className="w-3 h-3 mr-1" />
-                Filter
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">{isOdia ? "ଘଟଣା ଏବଂ ସତର୍କତା" : "Events & Alerts"}</CardTitle>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Filter className="h-4 w-4" />
               </Button>
-            </CardTitle>
+            </div>
           </CardHeader>
           <CardContent>
-            <EventsFeed />
+            <EventsFeed isOdia={isOdia} />
           </CardContent>
         </Card>
       </div>
