@@ -1,0 +1,23 @@
+#steps to get traffic monitoring footage
+
+# 1) first create a virutal env in python using this code - 
+
+# "python -m venv .venv"
+
+# then enter inside the virtual env using the following code - 
+
+# ".venv\Scripts\activate"
+
+# make sure to install dependencies by running the below command in " "
+
+# "pip install ultralytics supervision opencv-python numpy scipy"
+
+# 2) make sure input.mp4 (the traffic footage) is in the same directory
+
+# 3) run the following command in " " - 
+
+# "python vehicle_lane_speed.py --source input.mp4 --weights yolov8x.pt --out output.mp4 --show"
+
+# 4) wait until script is running
+
+#) 5) play the ouput.mp4
