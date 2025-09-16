@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TopBar } from "@/components/dashboard/TopBar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const TimeSeriesChart = ({ isOdia }: { isOdia?: boolean }) => (
   <div className="h-64 bg-secondary/20 rounded-lg flex items-center justify-center relative overflow-hidden">
@@ -329,307 +328,233 @@ const Analytics = () => {
         </Card>
 
         {/* Main Content Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          {/* Left Main Area - Interactive Map (60% width) */}
-          <div className="lg:col-span-3">
-            <Card className="bg-gradient-panel border-border/50">
-              <CardHeader className="pb-4">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <MapPin className="w-5 h-5" />
-{isOdia ? 'ଲାଇଭ ଟ୍ରାଫିକ ମାନଚିତ୍ର' : 'Live Traffic Map'}
-                  </CardTitle>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => toggleMapLayer('congestion')}
-                      className={mapLayers.congestion ? 'bg-primary/20 border-primary/50' : ''}
-                    >
-                      <Layers className="w-4 h-4 mr-1" />
-{isOdia ? 'ହିଟମାପ' : 'Heatmap'}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => toggleMapLayer('sensors')}
-                      className={mapLayers.sensors ? 'bg-primary/20 border-primary/50' : ''}
-                    >
-  IoT
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => toggleMapLayer('cctv')}
-                      className={mapLayers.cctv ? 'bg-primary/20 border-primary/50' : ''}
-                    >
-  CCTV
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="h-96 bg-slate-900 rounded-lg relative overflow-hidden">
-                  {/* OSM Dark Style Map Placeholder */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900">
-                    {/* Junction Markers */}
-                    {junctions.map((junction, index) => (
-                      <button
-                        key={junction.id}
-                        onClick={() => openJunctionModal(junction)}
-                        className="absolute w-4 h-4 bg-primary rounded-full border-2 border-white shadow-lg hover:scale-125 transition-transform cursor-pointer"
-                        style={{
-                          left: `${20 + index * 25}%`,
-                          top: `${30 + index * 15}%`
-                        }}
-                        title={junction.name}
-                      />
-                    ))}
-                    
-                    {/* Congestion Heatmap Overlay */}
-                    {mapLayers.congestion && (
-                      <div className="absolute inset-0 opacity-40">
-                        <div className="absolute w-20 h-20 bg-red-500/60 rounded-full blur-xl" style={{left: '30%', top: '40%'}} />
-                        <div className="absolute w-16 h-16 bg-amber-500/60 rounded-full blur-xl" style={{left: '60%', top: '25%'}} />
-                        <div className="absolute w-12 h-12 bg-green-500/60 rounded-full blur-xl" style={{left: '45%', top: '65%'}} />
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Map Legend */}
-                  <div className="absolute bottom-4 left-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 text-xs">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                        <span>{isOdia ? 'ଭାରୀ ଜାମ' : 'Heavy Congestion'}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
-                        <span>{isOdia ? 'ମଧ୍ୟମ ଟ୍ରାଫିକ' : 'Moderate Traffic'}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                        <span>{isOdia ? 'ମୁକ୍ତ ପ୍ରବାହ' : 'Free Flow'}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Time Range Scrubber */}
-                  <div className="absolute bottom-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-2">
-                    <div className="flex items-center gap-2 text-xs">
-                      <span>{isOdia ? 'ସମୟ:' : 'Time:'}</span>
-                      <div className="w-24 h-2 bg-muted rounded-full relative">
-                        <div className="w-3 h-3 bg-primary rounded-full absolute -top-0.5 left-3/4"></div>
-                      </div>
-                      <span>{isOdia ? 'ବର୍ତ୍ତମାନ' : 'Now'}</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Right Column - Analytics Panels (40% width) */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Performance Comparison */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Top Junction Metrics */}
+          <div className="lg:col-span-1">
             <Card className="bg-gradient-panel border-border/50">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-sm">
                   <BarChart2 className="w-4 h-4" />
-{isOdia ? 'କାର୍ଯ୍ୟଦକ୍ଷତା ତୁଳନା' : 'Performance Comparison'}
+                  {isOdia ? 'ଶୀର୍ଷ ଜଙ୍କସନ ମେଟ୍ରିକ୍ସ' : 'Top Junction Metrics'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {junctions.map((junction) => {
+                  const improvement = ((junction.wait_before - junction.wait_after) / junction.wait_before * 100);
+                  const statusColor = improvement > 15 ? 'text-green-400' : improvement > 5 ? 'text-amber-400' : 'text-red-400';
+                  const bgColor = improvement > 15 ? 'bg-green-500/10 border-green-500/20' : improvement > 5 ? 'bg-amber-500/10 border-amber-500/20' : 'bg-red-500/10 border-red-500/20';
+                  
+                  return (
+                    <div key={junction.id} className={`p-3 rounded-lg border ${bgColor} hover:bg-opacity-20 transition-all cursor-pointer`} title={isOdia ? `${junction.name} - ${improvement.toFixed(1)}% ଉନ୍ନତି` : `${junction.name} - ${improvement.toFixed(1)}% improvement`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium text-sm">{junction.name}</h4>
+                        <Badge variant="outline" className={`text-xs ${statusColor} border-current`}>
+                          {improvement > 0 ? '+' : ''}{improvement.toFixed(1)}%
+                        </Badge>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                          <span className="text-muted-foreground">{isOdia ? 'ଅପେକ୍ଷା:' : 'Wait:'}</span>
+                          <span className="ml-1 font-medium">{junction.wait_after}s</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">{isOdia ? 'ଥ୍ରୁପୁଟ:' : 'Throughput:'}</span>
+                          <span className={`ml-1 font-medium ${junction.throughput_delta > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                            {junction.throughput_delta > 0 ? '+' : ''}{junction.throughput_delta}%
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mt-2 h-1 bg-muted/20 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full transition-all ${improvement > 15 ? 'bg-green-400' : improvement > 5 ? 'bg-amber-400' : 'bg-red-400'}`}
+                          style={{ width: `${Math.min(Math.max(improvement, 0), 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Center Column - Trend Graph & Alerts */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Enhanced Trend Graph */}
+            <Card className="bg-gradient-panel border-border/50">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <TrendingUp className="w-4 h-4" />
+                  {isOdia ? 'କାର୍ଯ୍ୟଦକ୍ଷତା ଧାରା' : 'Performance Trends'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <TimeSeriesChart />
-                <Badge variant="default" className="bg-primary/20 text-primary mt-3">
-                  <TrendingDown className="w-3 h-3 mr-1" />
-{isOdia ? '15% ସାମଗ୍ରିକ ଉନ୍ନତି' : '15% Overall Improvement'}
-                </Badge>
-              </CardContent>
-            </Card>
-
-            {/* Traffic Flow Analysis */}
-            <div className="grid grid-cols-1 gap-4">
-              <Card className="bg-gradient-panel border-border/50">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm">{isOdia ? 'ସର୍ବୋତ୍ତମ ଜଙ୍କସନ' : 'Top Performing Junctions'}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {junctions.slice(0, 3).map((junction) => (
-                    <div key={junction.id} className="flex items-center justify-between p-2 bg-muted/20 rounded">
-                      <div>
-                        <p className="text-sm font-medium">{junction.name}</p>
-                        <p className="text-xs text-muted-foreground">{isOdia ? 'ଅପେକ୍ଷା:' : 'Wait:'} {junction.wait_after}s</p>
-                      </div>
-                      <div className="text-right">
-                        <p className={`text-sm font-bold ${junction.throughput_delta > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                          {junction.throughput_delta > 0 ? '+' : ''}{junction.throughput_delta}%
-                        </p>
-                        <p className="text-xs text-muted-foreground">{isOdia ? 'ଥ୍ରୁପୁଟ' : 'throughput'}</p>
-                      </div>
+                <div className="h-48 bg-secondary/20 rounded-lg relative overflow-hidden p-4">
+                  <svg viewBox="0 0 300 120" className="w-full h-full">
+                    <defs>
+                      <linearGradient id="rlGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3"/>
+                        <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.1"/>
+                      </linearGradient>
+                    </defs>
+                    
+                    {/* Grid */}
+                    {[...Array(4)].map((_, i) => (
+                      <line key={i} x1="0" y1={i * 30} x2="300" y2={i * 30} stroke="hsl(var(--border))" strokeWidth="0.5"/>
+                    ))}
+                    
+                    {/* Fixed Timer Line */}
+                    <polyline
+                      fill="none"
+                      stroke="hsl(var(--destructive))"
+                      strokeWidth="2"
+                      points="0,80 60,85 120,90 180,88 240,92 300,90"
+                    />
+                    
+                    {/* RL Engine Line */}
+                    <polyline
+                      fill="none"
+                      stroke="hsl(var(--primary))"
+                      strokeWidth="2"
+                      points="0,80 60,75 120,65 180,60 240,55 300,50"
+                    />
+                    
+                    {/* Fill under RL line */}
+                    <polygon
+                      fill="url(#rlGradient)"
+                      points="0,80 60,75 120,65 180,60 240,55 300,50 300,120 0,120"
+                    />
+                  </svg>
+                  
+                  <div className="absolute top-4 right-4 space-y-1 text-xs">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-destructive rounded-full"></div>
+                      <span>{isOdia ? 'ସ୍ଥିର ଟାଇମର' : 'Fixed Timer'}</span>
                     </div>
-                  ))}
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Incident Trends */}
-            <Card className="bg-gradient-panel border-border/50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-sm">{isOdia ? 'ଘଟଣା ଧାରା (30d)' : 'Incident Trends (30d)'}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-32 bg-muted/20 rounded-lg flex items-end justify-center gap-2 p-4">
-                  {incidents_30d.map((day, index) => (
-                    <div key={day.date} className="flex flex-col items-center gap-1">
-                      <div className="w-4 space-y-0.5">
-                        <div className="h-3 bg-red-500 rounded-sm" style={{height: `${day.potholes * 4}px`}}></div>
-                        <div className="h-3 bg-amber-500 rounded-sm" style={{height: `${day.violations * 2}px`}}></div>
-                        <div className="h-3 bg-blue-500 rounded-sm" style={{height: `${day.emergency * 8}px`}}></div>
-                      </div>
-                      <span className="text-xs text-muted-foreground">{index + 17}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex items-center justify-center gap-4 mt-3 text-xs">
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-red-500 rounded"></div>
-                    <span>{isOdia ? 'ଗର୍ତ୍ତ' : 'Potholes'}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-amber-500 rounded"></div>
-                    <span>{isOdia ? 'ଉଲ୍ଲଂଘନ' : 'Violations'}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-blue-500 rounded"></div>
-                    <span>{isOdia ? 'ଜରୁରୀ' : 'Emergency'}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* RL Metrics */}
-            <Card className="bg-gradient-panel border-border/50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-sm">{isOdia ? 'RL ଇଞ୍ଜିନ ମେଟ୍ରିକ୍ସ' : 'RL Engine Metrics'}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-center mb-4">
-                  <div className="relative w-20 h-20">
-                    <svg className="w-20 h-20 transform -rotate-90">
-                      <circle cx="40" cy="40" r="32" stroke="currentColor" strokeWidth="6" fill="none" className="text-muted/20" />
-                      <circle 
-                        cx="40" 
-                        cy="40" 
-                        r="32" 
-                        stroke="currentColor" 
-                        strokeWidth="6" 
-                        fill="none" 
-                        strokeDasharray={`${rl_metrics.success_rate * 201} 201`}
-                        className="text-primary"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-lg font-bold">{Math.round(rl_metrics.success_rate * 100)}%</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-primary rounded-full"></div>
+                      <span>{isOdia ? 'RL ଇଞ୍ଜିନ' : 'RL Engine'}</span>
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  <div>
-                    <p className="text-xs text-muted-foreground">{isOdia ? 'ଔସତ ବିଶ୍ୱାସ' : 'Avg Confidence'}</p>
-                    <p className="text-sm font-bold">{Math.round(rl_metrics.avg_confidence * 100)}%</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">{isOdia ? 'ହସ୍ତକ୍ଷେପ' : 'Interventions'}</p>
-                    <p className="text-sm font-bold">{rl_metrics.interventions}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Predictive Forecast */}
-            <Card className="bg-gradient-panel border-border/50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-sm">{isOdia ? 'ଜାମ ପୂର୍ବାନୁମାନ' : 'Congestion Forecast'}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs text-muted-foreground">{isOdia ? 'ପରବର୍ତ୍ତୀ ଘଣ୍ଟା' : 'Next Hour'}</span>
-                  <Badge variant="outline" className="text-amber-400 border-amber-400/30">
-{isOdia ? 'ମଧ୍ୟମ ବିପଦ' : 'Moderate Risk'}
+                
+                <div className="mt-3 flex items-center justify-center">
+                  <Badge variant="default" className="bg-primary/20 text-primary">
+                    <TrendingDown className="w-3 h-3 mr-1" />
+                    {isOdia ? '22% ଅପେକ୍ଷା ହ୍ରାସ' : '22% Wait Reduction'}
                   </Badge>
                 </div>
-                <div className="h-8 bg-muted/20 rounded-lg flex items-center px-2">
-                  <div className="flex-1 h-1 bg-gradient-to-r from-green-500 via-amber-500 to-red-500 rounded-full relative">
-                    <div className="absolute w-2 h-2 bg-amber-400 rounded-full -top-0.5 left-2/3"></div>
-                  </div>
+              </CardContent>
+            </Card>
+
+            {/* Alerts View Panel */}
+            <Card className="bg-gradient-panel border-border/50">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <AlertTriangle className="w-4 h-4" />
+                  {isOdia ? 'ସାମ୍ପ୍ରତିକ ଚେତାବନୀ' : 'Recent Alerts'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {[
+                  { id: 1, type: 'congestion', location: 'Master Canteen', severity: 'high', time: '2m', icon: '🚦' },
+                  { id: 2, type: 'pothole', location: 'Jaydev Vihar', severity: 'medium', time: '5m', icon: '🕳️' },
+                  { id: 3, type: 'violation', location: 'Kalinga Square', severity: 'low', time: '8m', icon: '⚠️' },
+                  { id: 4, type: 'emergency', location: 'Fire Station Road', severity: 'critical', time: '12m', icon: '🚨' }
+                ].map((alert) => {
+                  const severityColors = {
+                    critical: 'border-red-500/50 bg-red-500/10 text-red-300',
+                    high: 'border-amber-500/50 bg-amber-500/10 text-amber-300',
+                    medium: 'border-yellow-500/50 bg-yellow-500/10 text-yellow-300',
+                    low: 'border-green-500/50 bg-green-500/10 text-green-300'
+                  };
+                  
+                  return (
+                    <div key={alert.id} className={`p-2 rounded border ${severityColors[alert.severity as keyof typeof severityColors]} hover:bg-opacity-20 transition-all cursor-pointer`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">{alert.icon}</span>
+                          <div>
+                            <p className="text-xs font-medium">{alert.location}</p>
+                            <p className="text-xs text-muted-foreground capitalize">
+                              {isOdia ? 
+                                (alert.type === 'congestion' ? 'ଜାମ' : 
+                                 alert.type === 'pothole' ? 'ଗର୍ତ୍ତ' :
+                                 alert.type === 'violation' ? 'ଉଲ୍ଲଂଘନ' : 'ଜରୁରୀ') 
+                                : alert.type}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="text-xs text-muted-foreground">{alert.time}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Column - Segment Overview */}
+          <div className="lg:col-span-1">
+            <Card className="bg-gradient-panel border-border/50">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <MapPin className="w-4 h-4" />
+                  {isOdia ? 'ସେଗମେଣ୍ଟ ସମୀକ୍ଷା' : 'Segment Overview'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 gap-3">
+                  {[
+                    { id: 'S1', name: 'NH-16 Corridor', congestion: 85, vehicles: 342, status: 'critical', lastUpdate: '1m' },
+                    { id: 'S2', name: 'Bhubaneswar-Cuttack Road', congestion: 65, vehicles: 198, status: 'moderate', lastUpdate: '2m' },
+                    { id: 'S3', name: 'Kalinga Hospital Road', congestion: 35, vehicles: 89, status: 'good', lastUpdate: '1m' },
+                    { id: 'S4', name: 'Airport Road', congestion: 45, vehicles: 156, status: 'good', lastUpdate: '3m' },
+                    { id: 'S5', name: 'Patia Square', congestion: 75, vehicles: 267, status: 'moderate', lastUpdate: '2m' }
+                  ].map((segment) => {
+                    const statusConfig = {
+                      critical: { color: 'text-red-400', bg: 'bg-red-500/10 border-red-500/30', dot: 'bg-red-400' },
+                      moderate: { color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/30', dot: 'bg-amber-400' },
+                      good: { color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/30', dot: 'bg-green-400' }
+                    };
+                    
+                    const config = statusConfig[segment.status as keyof typeof statusConfig];
+                    
+                    return (
+                      <div key={segment.id} className={`p-3 rounded-lg border ${config.bg} hover:bg-opacity-20 transition-all cursor-pointer`} title={`${segment.name} - ${segment.congestion}% ${isOdia ? 'ଜାମ' : 'congestion'}`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-2 h-2 rounded-full ${config.dot}`}></div>
+                            <h4 className="font-medium text-xs">{segment.name}</h4>
+                          </div>
+                          <span className="text-xs text-muted-foreground">{segment.lastUpdate}</span>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground">{isOdia ? 'ଜାମ:' : 'Congestion:'}</span>
+                            <span className={`font-medium ${config.color}`}>{segment.congestion}%</span>
+                          </div>
+                          
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground">{isOdia ? 'ଯାନବାହନ:' : 'Vehicles:'}</span>
+                            <span className="font-medium">{segment.vehicles}</span>
+                          </div>
+                          
+                          <div className="h-1 bg-muted/20 rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full transition-all ${config.dot}`}
+                              style={{ width: `${segment.congestion}%` }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-                <p className="text-lg font-bold text-amber-400 mt-2">{isOdia ? '65% ଜାମ' : '65% Congestion'}</p>
               </CardContent>
             </Card>
           </div>
         </div>
-
-        {/* Junction Modal */}
-        {showJunctionModal && selectedJunction && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <Card className="bg-gradient-panel border-border/50 w-full max-w-2xl mx-4">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>{selectedJunction.name} Details</CardTitle>
-                  <Button variant="ghost" size="sm" onClick={() => setShowJunctionModal(false)}>
-                    ✕
-                  </Button>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {selectedJunction.lat}, {selectedJunction.lon}
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="h-32 bg-muted/20 rounded-lg flex items-center justify-center">
-                  <p className="text-muted-foreground">24h Wait Time Chart (Sparkline)</p>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-3 bg-muted/20 rounded-lg">
-                    <p className="text-xs text-muted-foreground">Wait Before</p>
-                    <p className="text-lg font-bold">{selectedJunction.wait_before}s</p>
-                  </div>
-                  <div className="p-3 bg-muted/20 rounded-lg">
-                    <p className="text-xs text-muted-foreground">Wait After</p>
-                    <p className="text-lg font-bold text-primary">{selectedJunction.wait_after}s</p>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-medium mb-2">Recent Alerts</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-muted/20 rounded">
-                      <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
-                      <span className="text-sm">Traffic spike detected</span>
-                      <span className="text-xs text-muted-foreground ml-auto">5m ago</span>
-                    </div>
-                    <div className="flex items-center gap-2 p-2 bg-muted/20 rounded">
-                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm">RL optimization applied</span>
-                      <span className="text-xs text-muted-foreground ml-auto">12m ago</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" size="sm">
-                    <Download className="w-4 h-4 mr-2" />
-                    Export
-                  </Button>
-                  <Button size="sm">
-                    Drill Down
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
       </div>
     </div>
   );
