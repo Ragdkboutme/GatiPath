@@ -36,7 +36,7 @@ const KPICard = ({
 
   return (
     <Card className={`bg-gradient-panel ${getVariantStyles()} transition-smooth hover:scale-105`}>
-      <CardContent className="p-4">
+      <CardContent className="p-3 md:p-4">
         <div className="flex items-center justify-between mb-2">
           <div className="p-2 rounded-lg bg-muted/20">
             <Icon className="w-4 h-4 text-primary" />
@@ -55,8 +55,8 @@ const KPICard = ({
         <div className="space-y-1">
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">{title}</p>
           <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-bold text-foreground">{value}</span>
-            {unit && <span className="text-sm text-muted-foreground">{unit}</span>}
+            <span className="text-xl md:text-2xl font-bold text-foreground">{value}</span>
+            {unit && <span className="text-xs md:text-sm text-muted-foreground">{unit}</span>}
           </div>
         </div>
       </CardContent>
@@ -72,8 +72,8 @@ export const KPIRibbon = ({ isOdia = false }) => {
     alertsActive: isOdia ? "ସକ୍ରିୟ ଅଲର୍ଟ" : "Alerts Active"
   };
   return (
-    <div className="p-6 border-b border-border">
-      <div className="grid grid-cols-4 gap-6">
+    <div className="p-3 md:p-6 border-b border-border">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
         <KPICard
           title={translations.avgCommute}
           value={isOdia ? "34 ମିନିଟ" : "34"}

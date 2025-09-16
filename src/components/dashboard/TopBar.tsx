@@ -2,7 +2,7 @@ import { Clock, MapPin, User, Wifi, Activity, Globe } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigation } from "./Navigation";
 
 export const TopBar = ({ isOdia, setIsOdia, timeRange }: { 
@@ -11,12 +11,27 @@ export const TopBar = ({ isOdia, setIsOdia, timeRange }: {
   timeRange: "live" | "1h" | "4h" | "24h";
 }) => {
   
-  const currentTime = new Date().toLocaleTimeString('en-US', { 
-    hour12: false, 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    second: '2-digit' 
-  });
+  const [currentTime, setCurrentTime] = useState(
+    new Date().toLocaleTimeString('en-US', { 
+      hour12: false, 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit' 
+    })
+  );
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString('en-US', { 
+        hour12: false, 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit' 
+      }));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   // Generate different metrics based on time range
   const getMetricsForTimeRange = () => {
@@ -65,8 +80,12 @@ export const TopBar = ({ isOdia, setIsOdia, timeRange }: {
     <header className="min-h-16 bg-card border-b border-border px-3 md:px-6 py-3 flex flex-col md:flex-row md:items-center justify-between shadow-panel gap-3 md:gap-0">
       {/* Left - Logo and Title */}
       <div className="flex items-center gap-3 md:gap-4">
-        <div className="w-8 h-8 bg-gradient-flow rounded-lg flex items-center justify-center">
-          <Activity className="w-5 h-5 text-primary-foreground" />
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+          <img 
+            src="/public/traffic-lights.jpg" 
+            alt="Traffic Lights" 
+            className="w-full h-full object-cover"
+          />
         </div>
         <div>
           <h1 className="text-lg md:text-xl font-semibold text-foreground">GatiPath</h1>

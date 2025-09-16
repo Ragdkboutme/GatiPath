@@ -4,6 +4,7 @@ import { LeftSidebar } from "./LeftSidebar";
 import { InteractiveMap } from "./InteractiveMap";
 import { RightColumn } from "./RightColumn";
 import { BottomAnalytics } from "./BottomAnalytics";
+import { MobileDrawer } from "./MobileDrawer";
 import { useState, useCallback } from "react";
 
 export const TrafficDashboard = () => {
@@ -51,8 +52,15 @@ export const TrafficDashboard = () => {
         </div>
       </div>
       
+      {/* Mobile Navigation Drawers */}
+      <MobileDrawer 
+        isOdia={isOdia}
+        onLanguageChange={handleLanguageChange}
+        onTimeRangeChange={handleTimeRangeChange}
+      />
+      
       {/* Footer */}
-      <div className="border-t border-border px-6 py-3">
+      <div className="border-t border-border px-3 md:px-6 py-3 pb-20 md:pb-3">
         <p className="text-xs text-muted-foreground">
           {isOdia 
             ? "କେବଳ ଅପରେଟରମାନଙ୍କ ପାଇଁ — କଞ୍ଚା CCTV ଆକସେସ୍ ଅକ୍ଷମ; କେବଳ ଏକତ୍ରିତ ଫିଡ୍" 

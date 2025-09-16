@@ -38,10 +38,9 @@ const CCTVTile = ({
       </div>
     </div>
 
-    {/* Simulated blurred video feed */}
-    <div className="absolute inset-0 mt-16 bg-gradient-to-br from-muted/30 to-muted/10 backdrop-blur-sm">
+    {/* Video feed area */}
+    <div className="absolute inset-0 mt-16 bg-gradient-to-br from-muted/30 to-muted/10">
       <div className="absolute inset-2 border-2 border-dashed border-muted-foreground/30 rounded"></div>
-      <div className="absolute top-2 left-2 text-xs text-muted-foreground">BLURRED</div>
       <div className="absolute top-2 right-2">
         <Badge variant={status === "online" ? "default" : "destructive"} className="text-xs px-1 py-0">
           {status === "online" ? "LIVE" : "OFF"}
@@ -82,7 +81,7 @@ export const RightColumn = ({ isOdia = false }: { isOdia?: boolean }) => {
   const [vehicleCounts, setVehicleCounts] = useState<Record<string, VehicleCounts>>({
     "Cam J1-01": { cars: 12, buses: 2, bikes: 18 },
     "Cam J1-02": { cars: 8, buses: 1, bikes: 15 },
-    "Cam J1-03": { cars: 0, buses: 0, bikes: 0 }, // offline
+    "Cam J1-03": { cars: 10, buses: 1, bikes: 14 }, // now online
     "Cam J1-04": { cars: 15, buses: 3, bikes: 22 }
   });
 
@@ -103,7 +102,7 @@ export const RightColumn = ({ isOdia = false }: { isOdia?: boolean }) => {
       setVehicleCounts(prev => ({
         "Cam J1-01": generateVehicleUpdate(prev["Cam J1-01"], true),
         "Cam J1-02": generateVehicleUpdate(prev["Cam J1-02"], true),
-        "Cam J1-03": generateVehicleUpdate(prev["Cam J1-03"], false), // offline
+        "Cam J1-03": generateVehicleUpdate(prev["Cam J1-03"], true), // now online
         "Cam J1-04": generateVehicleUpdate(prev["Cam J1-04"], true)
       }));
     }, 2000 + Math.random() * 1000); // 2-3 seconds interval
@@ -140,7 +139,7 @@ export const RightColumn = ({ isOdia = false }: { isOdia?: boolean }) => {
             <CCTVTile 
               camera="Cam J1-03" 
               location="Edge: Jetson Z" 
-              status="offline" 
+              status="online" 
               vehicleCounts={vehicleCounts["Cam J1-03"]}
               junction="Nandankanan Road Junction"
             />
