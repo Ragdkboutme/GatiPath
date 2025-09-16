@@ -1,4 +1,4 @@
-# 🚦 FlowSync: AI-Powered Traffic Signal Optimization
+# 🚦 GatiPath: AI-Powered Traffic Signal Optimization
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![OpenCV](https://img.shields.io/badge/OpenCV-Enabled-green)
