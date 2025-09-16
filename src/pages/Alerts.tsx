@@ -22,7 +22,7 @@ interface AlertData {
   assignedTo?: string;
 }
 
-const AlertStatistics = () => {
+const AlertStatistics = ({ isOdia = false }: { isOdia?: boolean }) => {
   const stats = {
     totalPotholes: 12,
     totalViolations: 30,
@@ -38,7 +38,7 @@ const AlertStatistics = () => {
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-destructive" />
             <div>
-              <p className="text-xs text-muted-foreground">Active Alerts</p>
+              <p className="text-xs text-muted-foreground">{isOdia ? 'ସକ୍ରିୟ ଚେତାବନୀ' : 'Active Alerts'}</p>
               <p className="text-lg font-bold text-destructive">{stats.activeAlerts}</p>
             </div>
           </div>
@@ -49,7 +49,7 @@ const AlertStatistics = () => {
           <div className="flex items-center gap-2">
             <Car className="w-4 h-4 text-blue-400" />
             <div>
-              <p className="text-xs text-muted-foreground">Potholes Today</p>
+              <p className="text-xs text-muted-foreground">{isOdia ? 'ଆଜି ଗର୍ତ୍ତ' : 'Potholes Today'}</p>
               <p className="text-lg font-bold text-blue-400">{stats.totalPotholes}</p>
             </div>
           </div>
@@ -60,7 +60,7 @@ const AlertStatistics = () => {
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-orange-400" />
             <div>
-              <p className="text-xs text-muted-foreground">Violations</p>
+              <p className="text-xs text-muted-foreground">{isOdia ? 'ଉଲ୍ଲଂଘନ' : 'Violations'}</p>
               <p className="text-lg font-bold text-orange-400">{stats.totalViolations}</p>
             </div>
           </div>
@@ -71,7 +71,7 @@ const AlertStatistics = () => {
           <div className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-green-400" />
             <div>
-              <p className="text-xs text-muted-foreground">RL Confidence</p>
+              <p className="text-xs text-muted-foreground">{isOdia ? 'RL ବିଶ୍ୱାସ' : 'RL Confidence'}</p>
               <p className="text-lg font-bold text-green-400">{stats.avgRLConfidence}%</p>
             </div>
           </div>
@@ -82,7 +82,7 @@ const AlertStatistics = () => {
           <div className="flex items-center gap-2">
             <CheckCircle className="w-4 h-4 text-green-500" />
             <div>
-              <p className="text-xs text-muted-foreground">Resolved Today</p>
+              <p className="text-xs text-muted-foreground">{isOdia ? 'ଆଜି ସମାଧାନ' : 'Resolved Today'}</p>
               <p className="text-lg font-bold text-green-500">{stats.resolvedToday}</p>
             </div>
           </div>
@@ -92,14 +92,14 @@ const AlertStatistics = () => {
   );
 };
 
-const FilterChips = ({ activeFilters, onFilterChange }: { activeFilters: string[], onFilterChange: (filters: string[]) => void }) => {
+const FilterChips = ({ activeFilters, onFilterChange, isOdia = false }: { activeFilters: string[], onFilterChange: (filters: string[]) => void, isOdia?: boolean }) => {
   const filters = [
-    { id: 'pothole', label: 'Pothole', icon: Car, color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
-    { id: 'rl', label: 'RL Engine', icon: Zap, color: 'bg-green-500/20 text-green-300 border-green-500/30' },
-    { id: 'violation', label: 'Violation', icon: AlertTriangle, color: 'bg-red-500/20 text-red-300 border-red-500/30' },
-    { id: 'weather', label: 'Weather', icon: Cloud, color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' },
-    { id: 'congestion', label: 'Congestion', icon: Car, color: 'bg-orange-500/20 text-orange-300 border-orange-500/30' },
-    { id: 'emergency', label: 'Emergency', icon: Ambulance, color: 'bg-purple-500/20 text-purple-300 border-purple-500/30' }
+    { id: 'pothole', label: isOdia ? 'ଗର୍ତ୍ତ' : 'Pothole', icon: Car, color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
+    { id: 'rl', label: isOdia ? 'RL ଇଞ୍ଜିନ' : 'RL Engine', icon: Zap, color: 'bg-green-500/20 text-green-300 border-green-500/30' },
+    { id: 'violation', label: isOdia ? 'ଉଲ୍ଲଂଘନ' : 'Violation', icon: AlertTriangle, color: 'bg-red-500/20 text-red-300 border-red-500/30' },
+    { id: 'weather', label: isOdia ? 'ପାଣିପାଗ' : 'Weather', icon: Cloud, color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' },
+    { id: 'congestion', label: isOdia ? 'ଜାମ' : 'Congestion', icon: Car, color: 'bg-orange-500/20 text-orange-300 border-orange-500/30' },
+    { id: 'emergency', label: isOdia ? 'ଜରୁରୀ' : 'Emergency', icon: Ambulance, color: 'bg-purple-500/20 text-purple-300 border-purple-500/30' }
   ];
 
   const toggleFilter = (filterId: string) => {
@@ -132,11 +132,12 @@ const FilterChips = ({ activeFilters, onFilterChange }: { activeFilters: string[
   );
 };
 
-const AlertCard = ({ alert, isExpanded, onToggleExpand, onAction }: { 
+const AlertCard = ({ alert, isExpanded, onToggleExpand, onAction, isOdia = false }: { 
   alert: AlertData, 
   isExpanded: boolean, 
   onToggleExpand: () => void,
-  onAction: (action: string, alertId: string) => void 
+  onAction: (action: string, alertId: string) => void,
+  isOdia?: boolean
 }) => {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -180,10 +181,10 @@ const AlertCard = ({ alert, isExpanded, onToggleExpand, onAction }: {
                 <span className="font-mono text-xs text-muted-foreground">{alert.time}</span>
               </div>
               <Badge className={getSeverityColor(alert.severity)}>
-                {alert.severity.toUpperCase()}
+                {isOdia ? (alert.severity === 'critical' ? 'ଗମ୍ଭୀର' : alert.severity === 'high' ? 'ଉଚ୍ଚ' : alert.severity === 'medium' ? 'ମଧ୍ୟମ' : 'କମ୍') : alert.severity.toUpperCase()}
               </Badge>
               <Badge className={getStatusColor(alert.status)}>
-                {alert.status.toUpperCase()}
+                {isOdia ? (alert.status === 'active' ? 'ସକ୍ରିୟ' : alert.status === 'assigned' ? 'ନ୍ୟସ୍ତ' : 'ସମାଧାନ') : alert.status.toUpperCase()}
               </Badge>
             </div>
             
@@ -199,17 +200,17 @@ const AlertCard = ({ alert, isExpanded, onToggleExpand, onAction }: {
             <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
               <div className="flex items-center gap-1">
                 <Eye className="w-3 h-3" />
-                <span>Confidence: {alert.confidence}%</span>
+                <span>{isOdia ? 'ବିଶ୍ୱାସ:' : 'Confidence:'} {alert.confidence}%</span>
               </div>
               <div>
-                Source: {alert.source}
+                {isOdia ? 'ଉତ୍ସ:' : 'Source:'} {alert.source}
               </div>
             </div>
 
             {alert.recommendedAction && (
               <div className="bg-blue-500/10 border border-blue-500/20 rounded p-2 mb-3">
                 <p className="text-xs text-blue-300">
-                  <strong>Recommended:</strong> {alert.recommendedAction}
+                  <strong>{isOdia ? 'ସୁପାରିଶ:' : 'Recommended:'}</strong> {alert.recommendedAction}
                 </p>
               </div>
             )}
@@ -254,18 +255,18 @@ const AlertCard = ({ alert, isExpanded, onToggleExpand, onAction }: {
           <div className="mt-4 pt-4 border-t border-border/50">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <h4 className="text-sm font-medium mb-2">Additional Details</h4>
+                <h4 className="text-sm font-medium mb-2">{isOdia ? 'ଅତିରିକ୍ତ ବିବରଣୀ' : 'Additional Details'}</h4>
                 <div className="space-y-2 text-xs text-muted-foreground">
-                  <div>Alert ID: {alert.id}</div>
-                  <div>Detection Time: {alert.time}</div>
-                  {alert.assignedTo && <div>Assigned to: {alert.assignedTo}</div>}
+                  <div>{isOdia ? 'ଚେତାବନୀ ID:' : 'Alert ID:'} {alert.id}</div>
+                  <div>{isOdia ? 'ଚିହ୍ନଟ ସମୟ:' : 'Detection Time:'} {alert.time}</div>
+                  {alert.assignedTo && <div>{isOdia ? 'ନ୍ୟସ୍ତ:' : 'Assigned to:'} {alert.assignedTo}</div>}
                 </div>
               </div>
               <div className="bg-secondary/20 rounded p-3">
-                <div className="text-xs text-muted-foreground mb-2">Location Preview</div>
+                <div className="text-xs text-muted-foreground mb-2">{isOdia ? 'ଅବସ୍ଥାନ ପ୍ରାକଦର୍ଶନ' : 'Location Preview'}</div>
                 <div className="h-24 bg-secondary/50 rounded flex items-center justify-center">
                   <MapPin className="w-6 h-6 text-muted-foreground" />
-                  <span className="ml-2 text-xs">Map View Placeholder</span>
+                  <span className="ml-2 text-xs">{isOdia ? 'ମାନଚିତ୍ର ଦୃଶ୍ୟ' : 'Map View Placeholder'}</span>
                 </div>
               </div>
             </div>
@@ -276,11 +277,12 @@ const AlertCard = ({ alert, isExpanded, onToggleExpand, onAction }: {
   );
 };
 
-const EventsFeed = ({ alerts, expandedAlerts, onToggleExpand, onAction }: { 
+const EventsFeed = ({ alerts, expandedAlerts, onToggleExpand, onAction, isOdia = false }: { 
   alerts: AlertData[], 
   expandedAlerts: Set<string>, 
   onToggleExpand: (id: string) => void,
-  onAction: (action: string, alertId: string) => void 
+  onAction: (action: string, alertId: string) => void,
+  isOdia?: boolean
 }) => {
 
   return (
@@ -292,6 +294,7 @@ const EventsFeed = ({ alerts, expandedAlerts, onToggleExpand, onAction }: {
           isExpanded={expandedAlerts.has(alert.id)}
           onToggleExpand={() => onToggleExpand(alert.id)}
           onAction={onAction}
+          isOdia={isOdia}
         />
       ))}
     </div>
@@ -413,22 +416,22 @@ const Alerts = () => {
         {/* Main Content */}
         <div className="flex-1 p-6">
           {/* Statistics Panel */}
-          <AlertStatistics />
+          <AlertStatistics isOdia={isOdia} />
           
           {/* Filters and Controls */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex-1">
-              <FilterChips activeFilters={activeFilters} onFilterChange={setActiveFilters} />
+              <FilterChips activeFilters={activeFilters} onFilterChange={setActiveFilters} isOdia={isOdia} />
             </div>
             <div className="flex items-center gap-4">
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-40">
-                  <SelectValue placeholder="Sort by" />
+                  <SelectValue placeholder={isOdia ? 'ସଜାଡ଼ନ୍ତୁ' : 'Sort by'} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="timestamp">Timestamp</SelectItem>
-                  <SelectItem value="severity">Severity</SelectItem>
-                  <SelectItem value="confidence">Confidence</SelectItem>
+                  <SelectItem value="timestamp">{isOdia ? 'ସମୟ' : 'Timestamp'}</SelectItem>
+                  <SelectItem value="severity">{isOdia ? 'ଗମ୍ଭୀରତା' : 'Severity'}</SelectItem>
+                  <SelectItem value="confidence">{isOdia ? 'ବିଶ୍ୱାସ' : 'Confidence'}</SelectItem>
                 </SelectContent>
               </Select>
               <Button
@@ -437,7 +440,7 @@ const Alerts = () => {
                 onClick={() => setSidebarOpen(!sidebarOpen)}
               >
                 <Settings className="w-4 h-4 mr-2" />
-                Settings
+                {isOdia ? 'ସେଟିଂସ' : 'Settings'}
               </Button>
             </div>
           </div>
@@ -449,7 +452,7 @@ const Alerts = () => {
                 <AlertTriangle className="w-5 h-5 text-destructive" />
                 {isOdia ? "ଚେତାବନୀ ଏବଂ ଘଟଣା" : "Active Alerts & Events"}
                 <Badge variant="destructive" className="ml-2">
-                  {filteredAlerts.filter(a => a.status === 'active').length} Active
+                  {filteredAlerts.filter(a => a.status === 'active').length} {isOdia ? 'ସକ୍ରିୟ' : 'Active'}
                 </Badge>
               </CardTitle>
             </CardHeader>
@@ -459,6 +462,7 @@ const Alerts = () => {
                 expandedAlerts={expandedAlerts}
                 onToggleExpand={handleToggleExpand}
                 onAction={handleAction}
+                isOdia={isOdia}
               />
             </CardContent>
           </Card>
@@ -473,15 +477,15 @@ const Alerts = () => {
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
                     <MapPin className="w-4 h-4" />
-                    Alert Locations
+                    {isOdia ? 'ଚେତାବନୀ ଅବସ୍ଥାନ' : 'Alert Locations'}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="h-48 bg-secondary/20 rounded flex items-center justify-center">
                     <div className="text-center">
                       <MapPin className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-xs text-muted-foreground">Interactive Map</p>
-                      <p className="text-xs text-muted-foreground">Click alerts to view location</p>
+                      <p className="text-xs text-muted-foreground">{isOdia ? 'ଇଣ୍ଟରାକ୍ଟିଭ ମାନଚିତ୍ର' : 'Interactive Map'}</p>
+                      <p className="text-xs text-muted-foreground">{isOdia ? 'ଅବସ୍ଥାନ ଦେଖିବାକୁ ଚେତାବନୀ କ୍ଲିକ୍ କରନ୍ତୁ' : 'Click alerts to view location'}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -491,21 +495,21 @@ const Alerts = () => {
               <Card className="bg-gradient-panel border-border/50">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide">
-                    Quick Actions
+                    {isOdia ? 'ଶୀଘ୍ର କାର୍ଯ୍ୟ' : 'Quick Actions'}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <Button variant="outline" size="sm" className="w-full justify-start">
                     <CheckCircle className="w-4 h-4 mr-2" />
-                    Mark All Resolved
+                    {isOdia ? 'ସବୁ ସମାଧାନ ଚିହ୍ନିତ କରନ୍ତୁ' : 'Mark All Resolved'}
                   </Button>
                   <Button variant="outline" size="sm" className="w-full justify-start">
                     <Bell className="w-4 h-4 mr-2" />
-                    Send Bulk Notification
+                    {isOdia ? 'ବଲ୍କ ବିଜ୍ଞପ୍ତି ପଠାନ୍ତୁ' : 'Send Bulk Notification'}
                   </Button>
                   <Button variant="outline" size="sm" className="w-full justify-start">
                     <BarChart3 className="w-4 h-4 mr-2" />
-                    Export Report
+                    {isOdia ? 'ରିପୋର୍ଟ ରପ୍ତାନି କରନ୍ତୁ' : 'Export Report'}
                   </Button>
                 </CardContent>
               </Card>

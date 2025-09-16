@@ -17,13 +17,15 @@ const CCTVTile = ({
   location, 
   status, 
   vehicleCounts,
-  junction
+  junction,
+  isOdia = false
 }: { 
   camera: string; 
   location: string; 
   status: "online" | "offline";
   vehicleCounts: VehicleCounts;
   junction: string;
+  isOdia?: boolean;
 }) => (
   <div className="relative bg-secondary rounded-md overflow-hidden border border-border h-64">
     {/* Junction Header */}
@@ -43,7 +45,7 @@ const CCTVTile = ({
       <div className="absolute inset-2 border-2 border-dashed border-muted-foreground/30 rounded"></div>
       <div className="absolute top-2 right-2">
         <Badge variant={status === "online" ? "default" : "destructive"} className="text-xs px-1 py-0">
-          {status === "online" ? "LIVE" : "OFF"}
+          {status === "online" ? (isOdia ? "ଲାଇଭ୍" : "LIVE") : (isOdia ? "ବନ୍ଦ" : "OFF")}
         </Badge>
       </div>
     </div>
@@ -54,21 +56,21 @@ const CCTVTile = ({
         {status === "online" ? (
           <div className="space-y-2">
             <div className="flex justify-between items-center bg-blue-500/10 rounded px-2 py-1.5 border border-blue-500/20">
-              <span className="text-blue-300 text-xs font-medium">Cars:</span>
+              <span className="text-blue-300 text-xs font-medium">{isOdia ? "କାର:" : "Cars:"}</span>
               <span className="text-blue-200 text-sm font-bold">{vehicleCounts.cars}</span>
             </div>
             <div className="flex justify-between items-center bg-green-500/10 rounded px-2 py-1.5 border border-green-500/20">
-              <span className="text-green-300 text-xs font-medium">Buses:</span>
+              <span className="text-green-300 text-xs font-medium">{isOdia ? "ବସ୍:" : "Buses:"}</span>
               <span className="text-green-200 text-sm font-bold">{vehicleCounts.buses}</span>
             </div>
             <div className="flex justify-between items-center bg-yellow-500/10 rounded px-2 py-1.5 border border-yellow-500/20">
-              <span className="text-yellow-300 text-xs font-medium">Bikes:</span>
+              <span className="text-yellow-300 text-xs font-medium">{isOdia ? "ବାଇକ୍:" : "Bikes:"}</span>
               <span className="text-yellow-200 text-sm font-bold">{vehicleCounts.bikes}</span>
             </div>
           </div>
         ) : (
           <div className="text-xs text-red-400 text-center py-3 bg-red-500/10 rounded border border-red-500/20">
-            Offline - No data
+            {isOdia ? "ଅଫଲାଇନ୍ - କୌଣସି ଡାଟା ନାହିଁ" : "Offline - No data"}
           </div>
         )}
       </div>
@@ -122,33 +124,37 @@ export const RightColumn = ({ isOdia = false }: { isOdia?: boolean }) => {
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="grid grid-cols-1 gap-3">
-            <CCTVTile 
-              camera="Cam J1-01" 
-              location="Edge: Jetson X" 
-              status="online" 
+            <CCTVTile
+              camera="Cam J1-01"
+              location={isOdia ? "ଜୟଦେବ ବିହାର" : "Jaydev Vihar"}
+              status="online"
               vehicleCounts={vehicleCounts["Cam J1-01"]}
-              junction="Jaydev Vihar Junction"
+              junction={isOdia ? "ଜୟଦେବ ବିହାର ଜଙ୍କସନ" : "Jaydev Vihar Junction"}
+              isOdia={isOdia}
             />
-            <CCTVTile 
-              camera="Cam J1-02" 
-              location="Edge: Jetson Y" 
-              status="online" 
+            <CCTVTile
+              camera="Cam J1-02"
+              location={isOdia ? "ମାଷ୍ଟର କ୍ୟାଣ୍ଟିନ" : "Master Canteen"}
+              status="online"
               vehicleCounts={vehicleCounts["Cam J1-02"]}
-              junction="Patia Square Junction"
+              junction={isOdia ? "ମାଷ୍ଟର କ୍ୟାଣ୍ଟିନ ଚକ" : "Master Canteen Square"}
+              isOdia={isOdia}
             />
-            <CCTVTile 
-              camera="Cam J1-03" 
-              location="Edge: Jetson Z" 
-              status="online" 
+            <CCTVTile
+              camera="Cam J1-03"
+              location={isOdia ? "ନନ୍ଦନକାନନ ରୋଡ୍" : "Nandankanan Road"}
+              status="online"
               vehicleCounts={vehicleCounts["Cam J1-03"]}
-              junction="Nandankanan Road Junction"
+              junction={isOdia ? "ନନ୍ଦନକାନନ ରୋଡ୍ ଜଙ୍କସନ" : "Nandankanan Road Junction"}
+              isOdia={isOdia}
             />
-            <CCTVTile 
-              camera="Cam J1-04" 
-              location="Edge: Jetson W" 
-              status="online" 
+            <CCTVTile
+              camera="Cam J1-04"
+              location={isOdia ? "ପାଟିଆ ଚକ" : "Patia Square"}
+              status="online"
               vehicleCounts={vehicleCounts["Cam J1-04"]}
-              junction="Acharya Vihar Junction"
+              junction={isOdia ? "ପାଟିଆ ଚକ ଜଙ୍କସନ" : "Patia Square Junction"}
+              isOdia={isOdia}
             />
           </div>
           <div className="text-xs text-muted-foreground bg-muted/20 rounded p-2">
@@ -231,9 +237,9 @@ export const RightColumn = ({ isOdia = false }: { isOdia?: boolean }) => {
       <Card className="bg-gradient-panel border-border/50">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
-            <Bell className="w-4 h-4" />
-            Events & Alerts
-          </CardTitle>
+          <Bell className="w-4 h-4" />
+          {isOdia ? "ସାମ୍ପ୍ରତିକ ଘଟଣା" : "Recent Events"}
+        </CardTitle>
         </CardHeader>
         <CardContent>
           <EventsFeed isOdia={isOdia} />
@@ -244,51 +250,51 @@ export const RightColumn = ({ isOdia = false }: { isOdia?: boolean }) => {
       <Card className="bg-gradient-panel border-border/50">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
-            <Activity className="w-4 h-4" />
-            {isOdia ? "IoT ଏବଂ ପରିବେଶ" : "IoT & Environment"}
-          </CardTitle>
+          <Cloud className="w-4 h-4" />
+          {isOdia ? "IoT ଏବଂ ପରିବେଶ" : "IoT & Environment"}
+        </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Weather */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Cloud className="w-4 h-4 text-muted-foreground" />
-              <div>
-                <div className="text-sm text-foreground">Light Rain — 22°C</div>
-                <div className="text-xs text-warning">Adjusting cycle ↑10%</div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Thermometer className="w-4 h-4 text-orange-400" />
+                <span className="text-sm">{isOdia ? "ତାପମାତ୍ରା" : "Temperature"}</span>
               </div>
+              <span className="text-sm font-bold">32°C</span>
             </div>
-          </div>
-
-          {/* AQI */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-foreground flex items-center gap-2">
-                <Wind className="w-4 h-4 text-muted-foreground" />
-                AQI: 186
-              </span>
-              <Badge variant="destructive" className="text-xs">Unhealthy</Badge>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Wind className="w-4 h-4 text-blue-400" />
+                <span className="text-sm">{isOdia ? "ପବନ ବେଗ" : "Wind Speed"}</span>
+              </div>
+              <span className="text-sm font-bold">{isOdia ? "12 କିମି/ଘଣ୍ଟା" : "12 km/h"}</span>
             </div>
-            <div className="text-xs text-muted-foreground">auto-adjust timings enabled</div>
-          </div>
-
-          {/* Road Health */}
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-foreground">Pothole alerts</span>
-            <Badge variant="destructive" className="text-xs">2 active</Badge>
-          </div>
-
-          {/* Connectivity */}
-          <div className="grid grid-cols-2 gap-4 pt-2 border-t border-border/50">
-            <div className="flex items-center gap-2">
-              <Battery className="w-4 h-4 text-flow-good" />
-              <span className="text-xs text-muted-foreground">Battery: 94%</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Activity className="w-4 h-4 text-green-400" />
+                <span className="text-sm">{isOdia ? "ବାୟୁ ଗୁଣବତ୍ତା" : "Air Quality"}</span>
+              </div>
+              <Badge variant="outline" className="text-green-400 border-green-400/30">
+                {isOdia ? "ଭଲ" : "Good"}
+              </Badge>
             </div>
-            <div className="flex items-center gap-2">
-              <Wifi className="w-4 h-4 text-flow-good" />
-              <span className="text-xs text-muted-foreground">34 devices</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Battery className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm">{isOdia ? "ସେନ୍ସର ସ୍ୱାସ୍ଥ୍ୟ" : "Sensor Health"}</span>
+              </div>
+              <span className="text-sm font-bold text-yellow-400">94%</span>
             </div>
-          </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Wifi className="w-4 h-4 text-blue-400" />
+                <span className="text-sm">{isOdia ? "ନେଟୱାର୍କ ସ୍ଥିତି" : "Network Status"}</span>
+              </div>
+              <Badge variant="outline" className="text-blue-400 border-blue-400/30">
+                {isOdia ? "ଅନଲାଇନ୍" : "Online"}
+              </Badge>
+            </div>
         </CardContent>
       </Card>
     </div>

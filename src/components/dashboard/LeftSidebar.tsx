@@ -6,11 +6,12 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 
-export const LeftSidebar = ({ onLanguageChange, onTimeRangeChange }: { 
+export const LeftSidebar = ({ onLanguageChange, onTimeRangeChange, isOdia = false }: { 
   onLanguageChange?: (isOdia: boolean) => void,
-  onTimeRangeChange?: (timeRange: string) => void 
+  onTimeRangeChange?: (timeRange: string) => void,
+  isOdia?: boolean
 }) => {
-  const [isOdia, setIsOdia] = useState(false);
+  const [localIsOdia, setLocalIsOdia] = useState(isOdia);
   const [timeRange, setTimeRange] = useState<"live" | "1h" | "4h" | "24h">("live");
   
   // Update parent component when time range changes
@@ -25,31 +26,31 @@ export const LeftSidebar = ({ onLanguageChange, onTimeRangeChange }: {
       {/* Region Selector */}
       <Card className="bg-gradient-panel border-border/50">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide">Region Control</CardTitle>
+          <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide">{isOdia ? 'ଅଞ୍ଚଳ ନିୟନ୍ତ୍ରଣ' : 'Region Control'}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="relative">
             <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground z-10" />
             <Select defaultValue="junction-12">
               <SelectTrigger className="pl-10 pr-10 py-2 bg-secondary rounded-md border border-border">
-                <SelectValue placeholder="Select Junction" />
+                <SelectValue placeholder={isOdia ? 'ଜଙ୍କସନ ବାଛନ୍ତୁ' : 'Select Junction'} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Junction Clusters</SelectLabel>
-                  <SelectItem value="junction-12">Junction Cluster 12</SelectItem>
-                  <SelectItem value="junction-8">Junction Cluster 8</SelectItem>
-                  <SelectItem value="junction-15">Junction Cluster 15</SelectItem>
-                  <SelectItem value="junction-23">Junction Cluster 23</SelectItem>
+                  <SelectLabel>{isOdia ? 'ଜଙ୍କସନ କ୍ଲଷ୍ଟର' : 'Junction Clusters'}</SelectLabel>
+                  <SelectItem value="junction-12">{isOdia ? 'ଜଙ୍କସନ କ୍ଲଷ୍ଟର ୧୨' : 'Junction Cluster 12'}</SelectItem>
+                  <SelectItem value="junction-8">{isOdia ? 'ଜଙ୍କସନ କ୍ଲଷ୍ଟର ୮' : 'Junction Cluster 8'}</SelectItem>
+                  <SelectItem value="junction-15">{isOdia ? 'ଜଙ୍କସନ କ୍ଲଷ୍ଟର ୧୫' : 'Junction Cluster 15'}</SelectItem>
+                  <SelectItem value="junction-23">{isOdia ? 'ଜଙ୍କସନ କ୍ଲଷ୍ଟର ୨୩' : 'Junction Cluster 23'}</SelectItem>
                 </SelectGroup>
                 <SelectSeparator />
                 <SelectGroup>
-                  <SelectLabel>Individual Junctions</SelectLabel>
-                  <SelectItem value="jaydev-vihar">Jaydev Vihar</SelectItem>
-                  <SelectItem value="patia-square">Patia Square</SelectItem>
-                  <SelectItem value="nandankanan-road">Nandankanan Road</SelectItem>
-                  <SelectItem value="acharya-vihar">Acharya Vihar</SelectItem>
-                  <SelectItem value="rasulgarh-square">Rasulgarh Square</SelectItem>
+                  <SelectLabel>{isOdia ? 'ବ୍ୟକ୍ତିଗତ ଜଙ୍କସନ' : 'Individual Junctions'}</SelectLabel>
+                  <SelectItem value="jaydev-vihar">{isOdia ? 'ଜୟଦେବ ବିହାର' : 'Jaydev Vihar'}</SelectItem>
+                  <SelectItem value="patia-square">{isOdia ? 'ପାଟିଆ ସ୍କୱାର' : 'Patia Square'}</SelectItem>
+                  <SelectItem value="nandankanan-road">{isOdia ? 'ନନ୍ଦନକାନନ ରୋଡ' : 'Nandankanan Road'}</SelectItem>
+                  <SelectItem value="acharya-vihar">{isOdia ? 'ଆଚାର୍ଯ୍ୟ ବିହାର' : 'Acharya Vihar'}</SelectItem>
+                  <SelectItem value="rasulgarh-square">{isOdia ? 'ରସୁଲଗଡ଼ ସ୍କୱାର' : 'Rasulgarh Square'}</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -62,7 +63,7 @@ export const LeftSidebar = ({ onLanguageChange, onTimeRangeChange }: {
         <CardHeader className="pb-3">
           <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
             <Clock className="w-4 h-4" />
-            Time Range
+            {isOdia ? 'ସମୟ ସୀମା' : 'Time Range'}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -73,7 +74,7 @@ export const LeftSidebar = ({ onLanguageChange, onTimeRangeChange }: {
               className="text-xs"
               onClick={() => handleTimeRangeChange("live")}
             >
-              Live
+              {isOdia ? 'ଲାଇଭ' : 'Live'}
             </Button>
             <Button 
               variant={timeRange === "1h" ? "default" : "outline"} 
@@ -106,7 +107,7 @@ export const LeftSidebar = ({ onLanguageChange, onTimeRangeChange }: {
       {/* Data Sources */}
       <Card className="bg-gradient-panel border-border/50">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide">Data Sources</CardTitle>
+          <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide">{isOdia ? 'ଡାଟା ଉତ୍ସ' : 'Data Sources'}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
@@ -142,14 +143,14 @@ export const LeftSidebar = ({ onLanguageChange, onTimeRangeChange }: {
       <Card className="bg-gradient-panel border-border/50">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide">
-            {isOdia ? "ମାନୁଆଲ ଓଭରାଇଡ" : "Manual Override"}
+            {localIsOdia ? "ମାନୁଆଲ ଓଭରାଇଡ" : "Manual Override"}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <Button variant="destructive" size="sm" className="w-full justify-start gap-2 text-xs px-3 py-2 h-auto min-h-[32px] overflow-hidden">
             <Power className="w-4 h-4 flex-shrink-0" />
             <span className="truncate">
-              {isOdia ? "ଜରୁରୀକାଳୀନ ଓଭରାଇଡ" : "Emergency Override"}
+              {localIsOdia ? "ଜରୁରୀକାଳୀନ ଓଭରାଇଡ" : "Emergency Override"}
             </span>
           </Button>
           
@@ -157,7 +158,7 @@ export const LeftSidebar = ({ onLanguageChange, onTimeRangeChange }: {
             <div className="flex items-center gap-2">
               <Play className="w-4 h-4 text-muted-foreground" />
               <span className="text-sm text-foreground">
-                {isOdia ? "ଛାୟା ମୋଡ" : "Shadow Mode"}
+                {localIsOdia ? "ଛାୟା ମୋଡ" : "Shadow Mode"}
               </span>
             </div>
             <Switch />
@@ -170,20 +171,20 @@ export const LeftSidebar = ({ onLanguageChange, onTimeRangeChange }: {
         <CardHeader className="pb-3">
           <CardTitle className="text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
             <Languages className="w-4 h-4" />
-            {isOdia ? "ଭାଷା" : "Language"}
+            {localIsOdia ? "ଭାଷା" : "Language"}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-sm text-foreground">
-                {isOdia ? "ଓଡ଼ିଆ" : "Odia"}
+                {localIsOdia ? "ଓଡ଼ିଆ" : "Odia"}
               </span>
             </div>
             <Switch 
-              checked={isOdia} 
+              checked={localIsOdia} 
               onCheckedChange={(checked) => {
-                setIsOdia(checked);
+                setLocalIsOdia(checked);
                 if (onLanguageChange) {
                   onLanguageChange(checked);
                 }

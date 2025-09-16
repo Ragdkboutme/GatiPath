@@ -426,87 +426,220 @@ def simulationTime():
             os._exit(1)
     
 
+# --- New helper functions for UI drawing ---
+
+def draw_rounded_box(surface, color, rect, border_radius=8, border_color=None):
+    """Draw rounded rect with optional border and shadow."""
+    SHADOW = (18, 18, 18)
+    SHADOW_OFFSET = 3
+    BORDER_WIDTH = 2
+    x, y, w, h = rect
+    # shadow
+    shadow_rect = pygame.Rect(x + SHADOW_OFFSET, y + SHADOW_OFFSET, w, h)
+    pygame.draw.rect(surface, SHADOW, shadow_rect, border_radius=border_radius)
+    # main
+    main_rect = pygame.Rect(x, y, w, h)
+    pygame.draw.rect(surface, color, main_rect, border_radius=border_radius)
+    if border_color:
+        pygame.draw.rect(surface, border_color, main_rect, width=BORDER_WIDTH, border_radius=border_radius)
+
+def draw_tree(surface, cx, cy, scale=1.0):
+    """Small decorative tree: trunk + three overlapping leaf circles."""
+    TRUNK = (92, 60, 23)
+    LEAF = (30, 130, 40)
+    trunk_w = int(8 * scale)
+    trunk_h = int(18 * scale)
+    pygame.draw.rect(surface, TRUNK, (cx - trunk_w // 2, cy, trunk_w, trunk_h))
+    # leaves (3 circles)
+    r = int(12 * scale)
+    pygame.draw.circle(surface, LEAF, (cx, cy), r)
+    pygame.draw.circle(surface, LEAF, (cx - int(r * 0.6), cy + int(r * 0.2)), int(r * 0.9))
+    pygame.draw.circle(surface, LEAF, (cx + int(r * 0.6), cy + int(r * 0.2)), int(r * 0.9))
+
+def draw_bush(surface, x, y, w, h):
+    """Decorative bush cluster using ellipses"""
+    BUSH = (64, 140, 60)
+    pygame.draw.ellipse(surface, BUSH, (x, y, w, h))
+    pygame.draw.ellipse(surface, BUSH, (x + int(w * 0.3), y - int(h * 0.2), w, h))
+    pygame.draw.ellipse(surface, BUSH, (x - int(w * 0.15), y - int(h * 0.1), w, h))
+
+
 class Main:
-    thread4 = threading.Thread(name="simulationTime",target=simulationTime, args=()) 
+    # Start helper threads (unchanged behavior)
+    thread4 = threading.Thread(name="simulationTime", target=simulationTime, args=())
     thread4.daemon = True
     thread4.start()
 
-    thread2 = threading.Thread(name="initialization",target=initialize, args=())    # initialization
+    thread2 = threading.Thread(name="initialization", target=initialize, args=())  # initialization
     thread2.daemon = True
     thread2.start()
 
-    # Colours 
-    black = (0, 0, 0)
-    white = (255, 255, 255)
-
-    # Screensize 
+    # Screen & colors
     screenWidth = 1400
     screenHeight = 800
     screenSize = (screenWidth, screenHeight)
 
-    # Setting background image i.e. image of intersection
-    background = pygame.image.load('images/mod_int.png')
-
     screen = pygame.display.set_mode(screenSize)
     pygame.display.set_caption("SIMULATION")
 
-    # Loading signal images and font
+    # Load images (keep same assets as before)
+    background = pygame.image.load('images/mod_int.png')
     redSignal = pygame.image.load('images/signals/red.png')
     yellowSignal = pygame.image.load('images/signals/yellow.png')
     greenSignal = pygame.image.load('images/signals/green.png')
-    font = pygame.font.Font(None, 30)
 
-    thread3 = threading.Thread(name="generateVehicles",target=generateVehicles, args=())    # Generating vehicles
+    font = pygame.font.Font(None, 28)
+
+    # Start vehicle generator thread
+    thread3 = threading.Thread(name="generateVehicles", target=generateVehicles, args=())
     thread3.daemon = True
     thread3.start()
 
+    # Colors
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+    BOX_GREY = (45, 45, 45)
+    TIMER_GREEN = (34, 139, 34)
+    TIMER_YELLOW = (240, 200, 0)
+    TIMER_RED = (200, 0, 0)
+    SHADOW = (18, 18, 18)
+    GRASS = (94, 169, 80)
+    BUSH = (64, 140, 60)
+    TRUNK = (92, 60, 23)
+    LEAF = (30, 130, 40)
+    BORDER = (220, 220, 220)
+
+    # Box sizes & padding
+    BOX_W, BOX_H = 72, 38
+    PAD = 10
+    SHADOW_OFFSET = 3
+    BORDER_WIDTH = 2
+    RADIUS = 8
+
+    # Main loop
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-        screen.blit(background,(0,0))   # display background in simulation
-        for i in range(0,noOfSignals):  # display signal and set timer according to current status: green, yello, or red
-            if(i==currentGreen):
-                if(currentYellow==1):
-                    if(signals[i].yellow==0):
+        # Draw intersection background first (unchanged roads remain visible)
+        screen.blit(background, (0, 0))
+
+        # Decorative environment (small clusters only, avoid roads)
+        # Top-left cluster
+        for i in range(3):
+            draw_bush(screen, 40 + i * 28, 28 + (i % 2) * 6, 60, 28)
+        draw_tree(screen, 140, 40, scale=1.1)
+        draw_tree(screen, 100, 80, scale=0.9)
+
+        # Top-right cluster
+        for i in range(3):
+            draw_bush(screen, 1150 + i * 20, 30 + (i % 2) * 5, 56, 24)
+        draw_tree(screen, 1280, 60, scale=1.0)
+        draw_tree(screen, 1220, 95, scale=0.9)
+
+        # Bottom-left cluster
+        for i in range(3):
+            draw_bush(screen, 40 + i * 24, 640 + (i % 2) * 4, 56, 24)
+        draw_tree(screen, 160, 680, scale=1.2)
+
+        # Bottom-right cluster
+        for i in range(3):
+            draw_bush(screen, 1120 + i * 24, 640 + (i % 2) * 4, 56, 24)
+        draw_tree(screen, 1260, 690, scale=1.0)
+
+        # Draw signals (icons) as before, and compute nicer boxes for timers + counts.
+        for i in range(0, noOfSignals):
+            # Render signal images (unchanged)
+            if i == currentGreen:
+                if currentYellow == 1:
+                    # yellow
+                    if signals[i].yellow == 0:
                         signals[i].signalText = "STOP"
                     else:
                         signals[i].signalText = signals[i].yellow
                     screen.blit(yellowSignal, signalCoods[i])
                 else:
-                    if(signals[i].green==0):
+                    if signals[i].green == 0:
                         signals[i].signalText = "SLOW"
                     else:
                         signals[i].signalText = signals[i].green
                     screen.blit(greenSignal, signalCoods[i])
             else:
-                if(signals[i].red<=10):
-                    if(signals[i].red==0):
+                if signals[i].red <= 10:
+                    if signals[i].red == 0:
                         signals[i].signalText = "GO"
                     else:
                         signals[i].signalText = signals[i].red
                 else:
                     signals[i].signalText = "---"
                 screen.blit(redSignal, signalCoods[i])
-        signalTexts = ["","","",""]
 
-        # display signal timer and vehicle count
-        for i in range(0,noOfSignals):  
-            signalTexts[i] = font.render(str(signals[i].signalText), True, white, black)
-            screen.blit(signalTexts[i],signalTimerCoods[i]) 
-            displayText = vehicles[directionNumbers[i]]['crossed']
-            vehicleCountTexts[i] = font.render(str(displayText), True, black, white)
-            screen.blit(vehicleCountTexts[i],vehicleCountCoods[i])
+        # Draw enhanced timer + vehicle-count boxes with dynamic spacing
+        for i in range(0, noOfSignals):
+            sx, sy = signalCoods[i]  # icon center-ish coords
+            # pick timer color
+            if i == currentGreen and currentYellow == 0:
+                timer_color = TIMER_GREEN
+            elif i == currentGreen and currentYellow == 1:
+                timer_color = TIMER_YELLOW
+            else:
+                timer_color = TIMER_RED
 
-        timeElapsedText = font.render(("Time Elapsed: "+str(timeElapsed)), True, black, white)
-        screen.blit(timeElapsedText,(1100,50))
+            # Decide vertical placement (top signals => place above, bottom signals => place below)
+            if sy < (screenHeight // 2):
+                timer_y = sy - 64  # above icon
+            else:
+                timer_y = sy + 48  # below icon
 
-        # display the vehicles
-        for vehicle in simulation:  
+            # Center timer box horizontally around icon
+            timer_x = sx - (BOX_W // 2)
+
+            # Decide where to place vehicle count box: left for left-half icons, right for right-half
+            if sx < (screenWidth // 2):
+                # place vehicle count to left of timer
+                count_x = timer_x - BOX_W - PAD
+            else:
+                # place vehicle count to right of timer
+                count_x = timer_x + BOX_W + PAD
+            count_y = timer_y  # same vertical as timer
+
+            # Clamp to screen bounds (prevent off-screen)
+            timer_x = max(8, min(timer_x, screenWidth - BOX_W - 8))
+            timer_y = max(8, min(timer_y, screenHeight - BOX_H - 8))
+            count_x = max(8, min(count_x, screenWidth - BOX_W - 8))
+            count_y = max(8, min(count_y, screenHeight - BOX_H - 8))
+
+            # Draw timer box with border
+            timer_rect = (timer_x, timer_y, BOX_W, BOX_H)
+            draw_rounded_box(screen, timer_color, timer_rect, border_radius=RADIUS, border_color=BORDER)
+
+            # Draw vehicle count box (neutral grey)
+            count_rect = (count_x, count_y, BOX_W, BOX_H)
+            draw_rounded_box(screen, BOX_GREY, count_rect, border_radius=RADIUS, border_color=BORDER)
+
+            # Render timer text centered in timer_rect
+            timer_text = str(signals[i].signalText)
+            txt_surf = font.render(timer_text, True, WHITE)
+            txt_rect = txt_surf.get_rect(center=(timer_x + BOX_W // 2, timer_y + BOX_H // 2))
+            screen.blit(txt_surf, txt_rect)
+
+            # Render vehicle count centered in count_rect
+            display_count = vehicles[directionNumbers[i]]['crossed']
+            count_surf = font.render(str(display_count), True, WHITE)
+            count_rect_center = count_surf.get_rect(center=(count_x + BOX_W // 2, count_y + BOX_H // 2))
+            screen.blit(count_surf, count_rect_center)
+
+        # Time elapsed box (top-right), small and unobtrusive
+        elapsed_w, elapsed_h = 220, 36
+        elapsed_x, elapsed_y = screenWidth - elapsed_w - 16, 18
+        draw_rounded_box(screen, BOX_GREY, (elapsed_x, elapsed_y, elapsed_w, elapsed_h), border_radius=RADIUS, border_color=BORDER)
+        timeElapsedText = font.render("Time Elapsed: " + str(timeElapsed), True, WHITE)
+        screen.blit(timeElapsedText, (elapsed_x + 12, elapsed_y + 8))
+
+        # Render all vehicles (unchanged logic)
+        for vehicle in simulation:
             screen.blit(vehicle.currentImage, [vehicle.x, vehicle.y])
-            # vehicle.render(screen)
             vehicle.move()
-        pygame.display.update()
 
-  
+        pygame.display.update()

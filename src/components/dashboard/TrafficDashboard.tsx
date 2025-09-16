@@ -32,7 +32,8 @@ export const TrafficDashboard = () => {
         <div className="hidden md:block">
           <LeftSidebar 
             onLanguageChange={handleLanguageChange} 
-            onTimeRangeChange={handleTimeRangeChange} 
+            onTimeRangeChange={handleTimeRangeChange}
+            isOdia={isOdia}
           />
         </div>
 

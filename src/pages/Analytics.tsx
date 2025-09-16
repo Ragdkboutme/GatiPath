@@ -169,7 +169,7 @@ const Analytics = () => {
               <div className="flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-destructive" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Active Alerts</p>
+                  <p className="text-xs text-muted-foreground">{isOdia ? 'ସକ୍ରିୟ ଚେତାବନୀ' : 'Active Alerts'}</p>
                   <p className="text-lg font-bold text-destructive">{kpis.active_alerts}</p>
                   <div className="flex items-center text-xs text-green-400">
                     <TrendingDown className="w-3 h-3 mr-1" />
@@ -185,7 +185,7 @@ const Analytics = () => {
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-amber-400" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Potholes Today</p>
+                  <p className="text-xs text-muted-foreground">{isOdia ? 'ଆଜି ଗର୍ତ୍ତ' : 'Potholes Today'}</p>
                   <p className="text-lg font-bold text-amber-400">{kpis.potholes_today}</p>
                   <div className="flex items-center text-xs text-red-400">
                     <TrendingUp className="w-3 h-3 mr-1" />
@@ -201,7 +201,7 @@ const Analytics = () => {
               <div className="flex items-center gap-2">
                 <Eye className="w-4 h-4 text-red-400" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Violations</p>
+                  <p className="text-xs text-muted-foreground">{isOdia ? 'ଉଲ୍ଲଂଘନ' : 'Violations'}</p>
                   <p className="text-lg font-bold text-red-400">{kpis.violations}</p>
                   <div className="flex items-center text-xs text-green-400">
                     <TrendingDown className="w-3 h-3 mr-1" />
@@ -217,7 +217,7 @@ const Analytics = () => {
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-primary" />
                 <div>
-                  <p className="text-xs text-muted-foreground">RL Confidence</p>
+                  <p className="text-xs text-muted-foreground">{isOdia ? 'RL ବିଶ୍ୱାସ' : 'RL Confidence'}</p>
                   <p className="text-lg font-bold text-primary">{kpis.rl_confidence}%</p>
                   <div className="flex items-center text-xs text-green-400">
                     <TrendingUp className="w-3 h-3 mr-1" />
@@ -233,8 +233,8 @@ const Analytics = () => {
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-blue-400" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Avg Speed</p>
-                  <p className="text-lg font-bold text-blue-400">{kpis.avg_speed} km/h</p>
+                  <p className="text-xs text-muted-foreground">{isOdia ? 'ଔସତ ଗତି' : 'Avg Speed'}</p>
+                  <p className="text-lg font-bold text-blue-400">{kpis.avg_speed} {isOdia ? 'କିମି/ଘଣ୍ଟା' : 'km/h'}</p>
                   <div className="flex items-center text-xs text-green-400">
                     <TrendingUp className="w-3 h-3 mr-1" />
                     ▲ 5
@@ -249,7 +249,7 @@ const Analytics = () => {
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-green-400" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Resolved Today</p>
+                  <p className="text-xs text-muted-foreground">{isOdia ? 'ଆଜି ସମାଧାନ' : 'Resolved Today'}</p>
                   <p className="text-lg font-bold text-green-400">{kpis.resolved_today}</p>
                   <div className="flex items-center text-xs text-green-400">
                     <TrendingUp className="w-3 h-3 mr-1" />
@@ -270,10 +270,10 @@ const Analytics = () => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1h">Last 1h</SelectItem>
-                <SelectItem value="6h">Last 6h</SelectItem>
-                <SelectItem value="24h">Last 24h</SelectItem>
-                <SelectItem value="7d">Last 7d</SelectItem>
+                <SelectItem value="1h">{isOdia ? 'ଶେଷ ୧ ଘଣ୍ଟା' : 'Last 1h'}</SelectItem>
+                <SelectItem value="6h">{isOdia ? 'ଶେଷ ୬ ଘଣ୍ଟା' : 'Last 6h'}</SelectItem>
+                <SelectItem value="24h">{isOdia ? 'ଶେଷ ୨୪ ଘଣ୍ଟା' : 'Last 24h'}</SelectItem>
+                <SelectItem value="7d">{isOdia ? 'ଶେଷ ୭ ଦିନ' : 'Last 7d'}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -283,26 +283,26 @@ const Analytics = () => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Locations</SelectItem>
-                <SelectItem value="bhubaneswar">Bhubaneswar</SelectItem>
-                <SelectItem value="cluster1">Cluster 1</SelectItem>
+                <SelectItem value="all">{isOdia ? 'ସମସ୍ତ ସ୍ଥାନ' : 'All Locations'}</SelectItem>
+                <SelectItem value="bhubaneswar">{isOdia ? 'ଭୁବନେଶ୍ୱର' : 'Bhubaneswar'}</SelectItem>
+                <SelectItem value="cluster1">{isOdia ? 'କ୍ଲଷ୍ଟର ୧' : 'Cluster 1'}</SelectItem>
               </SelectContent>
             </Select>
 
             <Button variant="outline" size="sm">
               <Filter className="w-4 h-4 mr-2" />
-              Compare Periods
+              {isOdia ? 'ସମୟ ତୁଳନା' : 'Compare Periods'}
             </Button>
           </div>
 
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm">
               <Download className="w-4 h-4 mr-2" />
-              Export CSV
+              {isOdia ? 'CSV ରପ୍ତାନି' : 'Export CSV'}
             </Button>
             <Button variant="outline" size="sm">
               <Share2 className="w-4 h-4 mr-2" />
-              Share
+              {isOdia ? 'ସେୟାର' : 'Share'}
             </Button>
             <Button variant="outline" size="sm">
               <Settings className="w-4 h-4" />
@@ -317,12 +317,12 @@ const Analytics = () => {
               <div className="flex items-center gap-3">
                 <AlertTriangle className="w-5 h-5 text-amber-400" />
                 <div>
-                  <p className="font-medium text-amber-400">Anomaly Detected</p>
-                  <p className="text-sm text-muted-foreground">Sudden congestion spike at J2 — +40% wait time</p>
+                  <p className="font-medium text-amber-400">{isOdia ? 'ଅସାମାନ୍ୟତା ଚିହ୍ନଟ' : 'Anomaly Detected'}</p>
+                  <p className="text-sm text-muted-foreground">{isOdia ? 'J2 ରେ ହଠାତ୍ ଜାମ ବୃଦ୍ଧି — +40% ଅପେକ୍ଷା ସମୟ' : 'Sudden congestion spike at J2 — +40% wait time'}</p>
                 </div>
               </div>
               <Button variant="outline" size="sm" className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10">
-                Open Alert
+                {isOdia ? 'ଚେତାବନୀ ଖୋଲନ୍ତୁ' : 'Open Alert'}
               </Button>
             </div>
           </CardContent>
@@ -337,7 +337,7 @@ const Analytics = () => {
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
                     <MapPin className="w-5 h-5" />
-                    Live Traffic Map
+{isOdia ? 'ଲାଇଭ ଟ୍ରାଫିକ ମାନଚିତ୍ର' : 'Live Traffic Map'}
                   </CardTitle>
                   <div className="flex items-center gap-2">
                     <Button
@@ -347,7 +347,7 @@ const Analytics = () => {
                       className={mapLayers.congestion ? 'bg-primary/20 border-primary/50' : ''}
                     >
                       <Layers className="w-4 h-4 mr-1" />
-                      Heatmap
+{isOdia ? 'ହିଟମାପ' : 'Heatmap'}
                     </Button>
                     <Button
                       variant="outline"
@@ -355,7 +355,7 @@ const Analytics = () => {
                       onClick={() => toggleMapLayer('sensors')}
                       className={mapLayers.sensors ? 'bg-primary/20 border-primary/50' : ''}
                     >
-                      IoT
+  IoT
                     </Button>
                     <Button
                       variant="outline"
@@ -363,7 +363,7 @@ const Analytics = () => {
                       onClick={() => toggleMapLayer('cctv')}
                       className={mapLayers.cctv ? 'bg-primary/20 border-primary/50' : ''}
                     >
-                      CCTV
+  CCTV
                     </Button>
                   </div>
                 </div>
@@ -401,15 +401,15 @@ const Analytics = () => {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                        <span>Heavy Congestion</span>
+                        <span>{isOdia ? 'ଭାରୀ ଜାମ' : 'Heavy Congestion'}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
-                        <span>Moderate Traffic</span>
+                        <span>{isOdia ? 'ମଧ୍ୟମ ଟ୍ରାଫିକ' : 'Moderate Traffic'}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                        <span>Free Flow</span>
+                        <span>{isOdia ? 'ମୁକ୍ତ ପ୍ରବାହ' : 'Free Flow'}</span>
                       </div>
                     </div>
                   </div>
@@ -417,11 +417,11 @@ const Analytics = () => {
                   {/* Time Range Scrubber */}
                   <div className="absolute bottom-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-2">
                     <div className="flex items-center gap-2 text-xs">
-                      <span>Time:</span>
+                      <span>{isOdia ? 'ସମୟ:' : 'Time:'}</span>
                       <div className="w-24 h-2 bg-muted rounded-full relative">
                         <div className="w-3 h-3 bg-primary rounded-full absolute -top-0.5 left-3/4"></div>
                       </div>
-                      <span>Now</span>
+                      <span>{isOdia ? 'ବର୍ତ୍ତମାନ' : 'Now'}</span>
                     </div>
                   </div>
                 </div>
@@ -436,14 +436,14 @@ const Analytics = () => {
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-sm">
                   <BarChart2 className="w-4 h-4" />
-                  Performance Comparison
+{isOdia ? 'କାର୍ଯ୍ୟଦକ୍ଷତା ତୁଳନା' : 'Performance Comparison'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <TimeSeriesChart />
                 <Badge variant="default" className="bg-primary/20 text-primary mt-3">
                   <TrendingDown className="w-3 h-3 mr-1" />
-                  15% Overall Improvement
+{isOdia ? '15% ସାମଗ୍ରିକ ଉନ୍ନତି' : '15% Overall Improvement'}
                 </Badge>
               </CardContent>
             </Card>
@@ -452,20 +452,20 @@ const Analytics = () => {
             <div className="grid grid-cols-1 gap-4">
               <Card className="bg-gradient-panel border-border/50">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm">Top Performing Junctions</CardTitle>
+                  <CardTitle className="text-sm">{isOdia ? 'ସର୍ବୋତ୍ତମ ଜଙ୍କସନ' : 'Top Performing Junctions'}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {junctions.slice(0, 3).map((junction) => (
                     <div key={junction.id} className="flex items-center justify-between p-2 bg-muted/20 rounded">
                       <div>
                         <p className="text-sm font-medium">{junction.name}</p>
-                        <p className="text-xs text-muted-foreground">Wait: {junction.wait_after}s</p>
+                        <p className="text-xs text-muted-foreground">{isOdia ? 'ଅପେକ୍ଷା:' : 'Wait:'} {junction.wait_after}s</p>
                       </div>
                       <div className="text-right">
                         <p className={`text-sm font-bold ${junction.throughput_delta > 0 ? 'text-green-400' : 'text-red-400'}`}>
                           {junction.throughput_delta > 0 ? '+' : ''}{junction.throughput_delta}%
                         </p>
-                        <p className="text-xs text-muted-foreground">throughput</p>
+                        <p className="text-xs text-muted-foreground">{isOdia ? 'ଥ୍ରୁପୁଟ' : 'throughput'}</p>
                       </div>
                     </div>
                   ))}
@@ -476,7 +476,7 @@ const Analytics = () => {
             {/* Incident Trends */}
             <Card className="bg-gradient-panel border-border/50">
               <CardHeader className="pb-4">
-                <CardTitle className="text-sm">Incident Trends (30d)</CardTitle>
+                <CardTitle className="text-sm">{isOdia ? 'ଘଟଣା ଧାରା (30d)' : 'Incident Trends (30d)'}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-32 bg-muted/20 rounded-lg flex items-end justify-center gap-2 p-4">
@@ -494,15 +494,15 @@ const Analytics = () => {
                 <div className="flex items-center justify-center gap-4 mt-3 text-xs">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-red-500 rounded"></div>
-                    <span>Potholes</span>
+                    <span>{isOdia ? 'ଗର୍ତ୍ତ' : 'Potholes'}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-amber-500 rounded"></div>
-                    <span>Violations</span>
+                    <span>{isOdia ? 'ଉଲ୍ଲଂଘନ' : 'Violations'}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-blue-500 rounded"></div>
-                    <span>Emergency</span>
+                    <span>{isOdia ? 'ଜରୁରୀ' : 'Emergency'}</span>
                   </div>
                 </div>
               </CardContent>
@@ -511,7 +511,7 @@ const Analytics = () => {
             {/* RL Metrics */}
             <Card className="bg-gradient-panel border-border/50">
               <CardHeader className="pb-4">
-                <CardTitle className="text-sm">RL Engine Metrics</CardTitle>
+                <CardTitle className="text-sm">{isOdia ? 'RL ଇଞ୍ଜିନ ମେଟ୍ରିକ୍ସ' : 'RL Engine Metrics'}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-center mb-4">
@@ -536,11 +536,11 @@ const Analytics = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
-                    <p className="text-xs text-muted-foreground">Avg Confidence</p>
+                    <p className="text-xs text-muted-foreground">{isOdia ? 'ଔସତ ବିଶ୍ୱାସ' : 'Avg Confidence'}</p>
                     <p className="text-sm font-bold">{Math.round(rl_metrics.avg_confidence * 100)}%</p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Interventions</p>
+                    <p className="text-xs text-muted-foreground">{isOdia ? 'ହସ୍ତକ୍ଷେପ' : 'Interventions'}</p>
                     <p className="text-sm font-bold">{rl_metrics.interventions}</p>
                   </div>
                 </div>
@@ -550,13 +550,13 @@ const Analytics = () => {
             {/* Predictive Forecast */}
             <Card className="bg-gradient-panel border-border/50">
               <CardHeader className="pb-4">
-                <CardTitle className="text-sm">Congestion Forecast</CardTitle>
+                <CardTitle className="text-sm">{isOdia ? 'ଜାମ ପୂର୍ବାନୁମାନ' : 'Congestion Forecast'}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs text-muted-foreground">Next Hour</span>
+                  <span className="text-xs text-muted-foreground">{isOdia ? 'ପରବର୍ତ୍ତୀ ଘଣ୍ଟା' : 'Next Hour'}</span>
                   <Badge variant="outline" className="text-amber-400 border-amber-400/30">
-                    Moderate Risk
+{isOdia ? 'ମଧ୍ୟମ ବିପଦ' : 'Moderate Risk'}
                   </Badge>
                 </div>
                 <div className="h-8 bg-muted/20 rounded-lg flex items-center px-2">
@@ -564,7 +564,7 @@ const Analytics = () => {
                     <div className="absolute w-2 h-2 bg-amber-400 rounded-full -top-0.5 left-2/3"></div>
                   </div>
                 </div>
-                <p className="text-lg font-bold text-amber-400 mt-2">65% Congestion</p>
+                <p className="text-lg font-bold text-amber-400 mt-2">{isOdia ? '65% ଜାମ' : '65% Congestion'}</p>
               </CardContent>
             </Card>
           </div>
