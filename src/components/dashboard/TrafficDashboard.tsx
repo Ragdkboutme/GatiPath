@@ -8,14 +8,19 @@ import { useState, useCallback } from "react";
 
 export const TrafficDashboard = () => {
   const [isOdia, setIsOdia] = useState(false);
+  const [timeRange, setTimeRange] = useState<"live" | "1h" | "4h" | "24h">("live");
   
   const handleLanguageChange = useCallback((value: boolean) => {
     setIsOdia(value);
   }, []);
+  
+  const handleTimeRangeChange = useCallback((value: string) => {
+    setTimeRange(value as "live" | "1h" | "4h" | "24h");
+  }, []);
   return (
     <div className="flex flex-col h-screen bg-background text-foreground">
       {/* Top Bar */}
-      <TopBar isOdia={isOdia} setIsOdia={setIsOdia} />
+      <TopBar isOdia={isOdia} setIsOdia={setIsOdia} timeRange={timeRange} />
       
       {/* KPI Ribbon */}
       <KPIRibbon isOdia={isOdia} />
@@ -24,13 +29,16 @@ export const TrafficDashboard = () => {
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
         {/* Left Sidebar - Hidden on mobile, shown on tablet and up */}
         <div className="hidden md:block">
-          <LeftSidebar onLanguageChange={handleLanguageChange} />
+          <LeftSidebar 
+            onLanguageChange={handleLanguageChange} 
+            onTimeRangeChange={handleTimeRangeChange} 
+          />
         </div>
 
         {/* Center Map Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-hidden">
-            <InteractiveMap isOdia={isOdia} />
+            <InteractiveMap isOdia={isOdia} timeRange={timeRange} />
           </div>
           <div className="h-[40%] md:h-[40%] overflow-auto">
             <BottomAnalytics isOdia={isOdia} />

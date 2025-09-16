@@ -69,7 +69,7 @@ const Analytics = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Top Bar */}
-      <TopBar isOdia={isOdia} setIsOdia={setIsOdia} />
+      <TopBar isOdia={isOdia} setIsOdia={setIsOdia} timeRange="live" />
       
       <div className="container mx-auto p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

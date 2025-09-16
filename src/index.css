@@ -8,7 +8,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* FlowSync Traffic Dashboard Design System */
+    /* GatiPath Traffic Dashboard Design System */
     --background: 210 30% 8%;           /* #0B1B2B - Navy background */
     --foreground: 210 20% 95%;          /* Light text */
 

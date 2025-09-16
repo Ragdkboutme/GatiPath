@@ -120,8 +120,14 @@ const JunctionInfo = ({ isOdia = false }: { isOdia?: boolean }) => {
 };
 
 // Main Interactive Map Component
-export const InteractiveMap = ({ isOdia = false }: { isOdia?: boolean }) => {
+export const InteractiveMap = ({ isOdia = false, timeRange = "live" }: { isOdia?: boolean; timeRange?: "live" | "1h" | "4h" | "24h" }) => {
   const [selectedJunction, setSelectedJunction] = useState<number | null>(null);
+  const [showLiveOverlay, setShowLiveOverlay] = useState(timeRange === "live");
+  
+  // Update live overlay when timeRange changes
+  useEffect(() => {
+    setShowLiveOverlay(timeRange === "live");
+  }, [timeRange]);
   
   // Sample junction data
   const junctions = [
@@ -247,6 +253,21 @@ export const InteractiveMap = ({ isOdia = false }: { isOdia?: boolean }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
+        
+        {/* Live Data Overlay */}
+        {showLiveOverlay && (
+          <div className="absolute top-0 left-0 right-0 bg-primary/90 text-primary-foreground py-1 px-4 flex items-center justify-between z-[1000]">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+              <span className="text-sm font-medium">
+                {isOdia ? "ଲାଇଭ୍ ଡାଟା" : "Live Data"}
+              </span>
+            </div>
+            <Badge variant="outline" className="text-xs border-primary-foreground/30 text-primary-foreground">
+              {isOdia ? "ରିଅଲ-ଟାଇମ୍ ଅପଡେଟ୍" : "Real-time updates"}
+            </Badge>
+          </div>
+        )}
         
         {/* Junction markers with enhanced functionality */}
         {junctions.map((junction) => (

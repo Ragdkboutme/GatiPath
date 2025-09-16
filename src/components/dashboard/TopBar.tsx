@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Navigation } from "./Navigation";
 
-export const TopBar = ({ isOdia, setIsOdia }: { 
+export const TopBar = ({ isOdia, setIsOdia, timeRange }: { 
   isOdia: boolean; 
-  setIsOdia: (value: boolean) => void; 
+  setIsOdia: (value: boolean) => void;
+  timeRange: "live" | "1h" | "4h" | "24h";
 }) => {
   
   const currentTime = new Date().toLocaleTimeString('en-US', { 
@@ -17,11 +18,47 @@ export const TopBar = ({ isOdia, setIsOdia }: {
     second: '2-digit' 
   });
 
+  // Generate different metrics based on time range
+  const getMetricsForTimeRange = () => {
+    switch(timeRange) {
+      case "1h":
+        return {
+          vehicleCount: "1,245",
+          avgSpeed: "32 km/h",
+          congestionLevel: "Medium"
+        };
+      case "4h":
+        return {
+          vehicleCount: "5,872",
+          avgSpeed: "28 km/h",
+          congestionLevel: "High"
+        };
+      case "24h":
+        return {
+          vehicleCount: "24,513",
+          avgSpeed: "35 km/h",
+          congestionLevel: "Low-Medium"
+        };
+      default: // live
+        return {
+          vehicleCount: "247",
+          avgSpeed: "30 km/h",
+          congestionLevel: "Medium"
+        };
+    }
+  };
+
+  const metrics = getMetricsForTimeRange();
+
   const translations = {
     title: isOdia ? "ଟ୍ରାଫିକ୍ ସଂଚାଳନ ପ୍ୟାନେଲ" : "Traffic Operations Dashboard",
     region: isOdia ? "ଭୁବନେଶ୍ୱର — ସଂଯୋଗ କ୍ଲଷ୍ଟର 12" : "Bhubaneswar — Junction Cluster 12",
     online: isOdia ? "ଅନଲାଇନ" : "Online",
-    uptime: isOdia ? "ଅପଟାଇମ: 99.9%" : "Uptime: 99.9%"
+    uptime: isOdia ? "ଅପଟାଇମ: 99.9%" : "Uptime: 99.9%",
+    timeRangeLabel: isOdia ? "ସମୟ ସୀମା" : "Time Range",
+    vehicleCount: isOdia ? `ଯାନ: ${metrics.vehicleCount}` : `Vehicles: ${metrics.vehicleCount}`,
+    avgSpeed: isOdia ? `ଗତି: ${metrics.avgSpeed}` : `Avg Speed: ${metrics.avgSpeed}`,
+    congestionLevel: isOdia ? `ଭିଡ଼: ${metrics.congestionLevel}` : `Congestion: ${metrics.congestionLevel}`
   };
 
   return (
@@ -32,20 +69,38 @@ export const TopBar = ({ isOdia, setIsOdia }: {
           <Activity className="w-5 h-5 text-primary-foreground" />
         </div>
         <div>
-          <h1 className="text-lg md:text-xl font-semibold text-foreground">FlowSync</h1>
+          <h1 className="text-lg md:text-xl font-semibold text-foreground">GatiPath</h1>
           <p className="text-xs md:text-sm text-muted-foreground">{translations.title}</p>
         </div>
       </div>
 
-      {/* Center - Live Clock and Region */}
+      {/* Center - Live Clock, Region and Metrics */}
       <div className="flex flex-wrap items-center gap-3 md:gap-6 order-3 md:order-2">
         <div className="flex items-center gap-2 text-center">
           <Clock className="w-4 h-4 text-primary" />
           <span className="font-mono text-base md:text-lg font-medium text-foreground">{currentTime}</span>
+          {timeRange !== "live" && (
+            <Badge variant="outline" className="ml-1">
+              {timeRange.toUpperCase()}
+            </Badge>
+          )}
         </div>
         <div className="flex items-center gap-2 hidden md:flex">
           <MapPin className="w-4 h-4 text-muted-foreground" />
           <span className="text-sm text-foreground">{translations.region}</span>
+        </div>
+        
+        {/* Metrics based on time range */}
+        <div className="hidden md:flex items-center gap-4 ml-4 border-l border-border pl-4">
+          <Badge variant="secondary" className="text-xs">
+            {translations.vehicleCount}
+          </Badge>
+          <Badge variant="secondary" className="text-xs">
+            {translations.avgSpeed}
+          </Badge>
+          <Badge variant="secondary" className="text-xs">
+            {translations.congestionLevel}
+          </Badge>
         </div>
       </div>
 

@@ -13,7 +13,7 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Top Bar */}
-      <TopBar isOdia={isOdia} setIsOdia={setIsOdia} />
+      <TopBar isOdia={isOdia} setIsOdia={setIsOdia} timeRange="live" />
       
       <div className="container mx-auto p-6">
         <Card className="bg-gradient-panel border-border/50">
